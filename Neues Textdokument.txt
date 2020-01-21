@@ -1,0 +1,34 @@
+
+VB6-Graphik			https://www.go4expert.com/articles/graphics-visual-basic-6-t30202/
+		Floodfill	https://activevb.de/tipps/vb6tipps/tipp0754.html
+				http://www.activevb.de/tipps/vb6tipps/tipp0170.html
+				
+		Bsp. Slider	https://www.ammergauer-alpen.de/oberammergau/Media/Touren/Wanderung-Altherrenweg
+
+
+
+ISIN-Liste			https://www.finanzen.net/aktien/deutschland-aktien-realtimekurse@intpagenr_2
+WKN Liste			https://peketec.de/portal/suche/?s=510200
+
+
+Excel				https://diyinvestor.de/historische-aktienkurse-nach-excel-importieren/
+Historische Kurse Anleitung	https://www.trading-treff.de/wissen/historische-aktienkurse-runterladen
+Historische Kurse 		https://www.ariva.de/bmw-aktie/historische_kurse
+
+
+Etoro	kostenlose transaktionen??
+
+
+EMAs senken den Rückstand einfacher gleitender Durchschnitte, indem den aktuellen Kursen eine höhere Gewichtung als den älteren Kursen zuteil wird. 
+goforex.com
+
+
+N ist dabei einfach der 20-tägige exponentiell gleitende Durchschnitt der True Range - zum heutigen Zeitpunkt allgemein [...] 
+meta-trader.de
+
+
+https://www.wallstreet-online.de/nachricht/12049259-rallye-fort-groessten-cannabisplayer-kalifornien
+
+
+https://www.ariva.de/Infineon-aktie/historische_kurse
+https://www.boerse.de/aktien/BMW-Aktie/DE0005190003

@@ -1,0 +1,6 @@
+511000:	"charts/show/key/511000/"">All for one Steeb AG</a></td><td>A1OS</td><td>DE0005110001</td><td>511000</td><td></td><td></td>"
+510480:	"charts/show/key/510480/"">Syzygy AG</a></td><td>SYZ</td><td>DE0005104806</td><td>510480</td><td></td><td></td>"
+510450:	"charts/show/key/510450/"">Group Business Softw</a></td><td>INW</td><td>DE0005104509</td><td>510450</td><td></td><td></td>"
+510440:	"charts/show/key/510440/"">Atoss Software AG</a></td><td>AOF</td><td>DE0005104400</td><td>510440</td><td></td><td></td>"
+510300:	"charts/show/key/510300/"">Adva Optical Networking SE</a></td><td>ADV</td><td>DE0005103006</td><td>510300</td><td></td><td></td>"
+510200:	"charts/show/key/510200/"">Basler AG</a></td><td>BSL</td><td>DE0005102008</td><td>510200</td><td></td><td></td>"
