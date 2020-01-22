@@ -52,8 +52,8 @@ Public ScaleLast As MousePos
 
 '=== Analyse ===
 Public SdLength As Long
-Public SharePrice As Double
-Public Rise As Boolean
+'Public SharePrice As Double
+'Public Rise As Boolean
 Public StartSharePrice As Double
 Public StartEuro As Double
 Public StartAccount As Double

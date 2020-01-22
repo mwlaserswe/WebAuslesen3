@@ -7,8 +7,8 @@ Begin VB.Form Form1
    ClientTop       =   870
    ClientWidth     =   17550
    LinkTopic       =   "Form1"
-   ScaleHeight     =   15315
-   ScaleWidth      =   28560
+   ScaleHeight     =   8025
+   ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer Timer1 
       Interval        =   10000
@@ -127,9 +127,9 @@ Begin VB.Form Form1
       _Version        =   393216
    End
    Begin VB.CommandButton C_DrawChart 
-      Caption         =   "Draw Chart"
+      Caption         =   "Draw Chart 1"
       Height          =   495
-      Left            =   8760
+      Left            =   8160
       TabIndex        =   10
       Top             =   3240
       Width           =   1215
@@ -413,13 +413,11 @@ Option Explicit
 Dim cnt As Long
 
 Private Sub C_DrawChart_Click()
-'    GlbScaleX = 3
-'    GlbScaleY = 10
     PicChart.Cls
     DispCoordinateSystem
     ReadChartFile
     MovingAverage (SdLength)
-    Analyse
+    Analyse_02
     DisplayChart
 End Sub
 
@@ -736,7 +734,8 @@ Private Sub M_DisplayChart_Click()
     
     DispChartDialog.CancelError = True
     DispChartDialog.InitDir = App.Path
-    DispChartDialog.Filter = "CSV-Datei (*.csv)|*.csv"
+    'DispChartDialog.Filter = "CSV-Datei (*.csv)|*.csv|Text-Datei (*.txt)|*.txt"
+    DispChartDialog.Filter = "Share Files |*.csv; *.txt|"
     DispChartDialog.Filename = ""
     DispChartDialog.ShowOpen
     ChartFilename = DispChartDialog.Filename

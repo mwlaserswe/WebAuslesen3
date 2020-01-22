@@ -172,10 +172,18 @@ Public Sub MovingAverage(Length As Long)
     Next idx
 End Sub
 
-
-Public Sub Analyse()
+'=====================================================================
+'                       Analyse_01
+' Einstieg: wenn der Kurs über dem GD liegt, wird gekauft.
+' Wenn der Kurs von unten durch den GD sticht, wird gekauft.
+' Wenn der Kurs von oben unter den GD fällt, wird verkauft.
+'=====================================================================
+Public Sub Analyse_01()
     Dim idx As Long
     Dim BuyNow As Boolean
+    Dim SharePrice As Double
+    Dim Rise As Boolean
+
 
     
     SharePrice = 1
@@ -211,6 +219,80 @@ Public Sub Analyse()
             If Rise = True Then
                 ChartArray(idx - 1).Account = ChartArray(idx - 1).Account * 0.985
             End If
+            Rise = False
+        End If
+        
+        If Rise Then
+            ChartArray(idx).Account = ChartArray(idx).Value / StartSharePrice * StartAccount
+'    If ChartArray(idx).Account > 1000 Then
+'        ChartArray(idx).Account = 1000
+'    End If
+        Else
+            ChartArray(idx).Account = ChartArray(idx - 1).Account
+        End If
+        
+      
+    idx = idx + 1
+    Wend
+    
+'    For idx = Length To UBound(ChartArray)
+'
+'    Next idx
+    
+End Sub
+
+
+'=====================================================================
+'                       Analyse_02
+' Einstieg: Im Gegelsatz zu Analye_01 wird zuerst gewartet, bis
+'           bis der Kurs von unten durch den GS sticht.
+' Wenn der Kurs von unten durch den GD sticht, wird gekauft.
+' Wenn der Kurs von oben unter den GD fällt, wird verkauft.
+'=====================================================================
+Public Sub Analyse_02()
+    Dim idx As Long
+'    Dim BuyNow As Boolean
+    Dim SharePrice As Double
+    Dim Rise As Boolean
+    Dim ReadyForFirstRise As Boolean
+    
+
+    SharePrice = 1
+'    ChartArray(idx).Account = SharePrice
+'    For idx = 0 To 1
+'        ChartArray(idx).Account = SharePrice
+'    Next idx
+    
+    idx = CLng(Zahl(Form1.T_InvestmentStart))
+    
+'    SharePrice = 10
+    SharePrice = ChartArray(idx).Value
+    
+    ChartArray(idx).Account = SharePrice
+    ChartArray(idx + 1).Account = SharePrice
+    ChartArray(idx - 1).Account = SharePrice
+    Rise = False
+     
+    While idx <= UBound(ChartArray)
+        If ChartArray(idx).Distance > 0 Then
+            If ReadyForFirstRise Then
+                ChartArray(idx).Trend = "Rise"
+                If Rise = False Then
+                    StartSharePrice = ChartArray(idx).Value
+                    StartAccount = ChartArray(idx - 1).Account
+    '                BuyNow = True
+                Else
+    '                BuyNow = False
+                End If
+                
+                Rise = True
+            End If
+        Else
+             ChartArray(idx).Trend = "Hold"
+            If Rise = True Then
+                ChartArray(idx - 1).Account = ChartArray(idx - 1).Account * 0.985
+            End If
+            ReadyForFirstRise = True
             Rise = False
         End If
         
