@@ -4929,3 +4929,4 @@ Datum;Erster;Hoch;Tief;Schlusskurs;Stuecke;Volumen
 19.01.2020; ; ; ;34,05
 20.01.2020; ; ; ;34,24
 21.01.2020; ; ; ;33,7
+22.01.2020; ; ; ;33,81
