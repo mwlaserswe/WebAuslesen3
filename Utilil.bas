@@ -45,7 +45,7 @@ Public Function GetHTMLCode(strURL) As String
 AccessError:
     GetHTMLCode = ">>>ERROR<<<"
     AccessErrorCnt = AccessErrorCnt + 1
-    Form1.L_ErrorCnt = AccessErrorCnt
+'    L_ErrorCnt = AccessErrorCnt
 '    Form1.Timer2.Enabled = False
 End Function
 
@@ -72,4 +72,51 @@ Public Function SubVector(v1 As MousePos, v2 As MousePos) As MousePos
     SubVector.Y = v1.Y - v2.Y
 End Function
 
+
+Sub ReadCompanyListFile(MyList As Variant)
+    Dim CompanyListFilename As String
+    Dim CompanyListFile As Integer
+    Dim Zeile As String
+    Dim CompanyListEntities() As String
+    Dim idx As Long
+    
+    ReDim CompanyListArray(0 To 0)
+    MyList.Clear
+'    List2.Clear
+    
+    On Error GoTo ReadCompanyListFileErr
+    
+    CompanyListFilename = App.Path & "\ISIN-WKN.txt"
+    CompanyListFile = FreeFile
+    Open CompanyListFilename For Input As CompanyListFile
+        
+    While Not EOF(CompanyListFile)
+        Line Input #CompanyListFile, Zeile
+        If Zeile <> "" Then
+            MyList.AddItem Zeile
+            SepariereString Zeile, CompanyListEntities, vbTab
+            idx = UBound(CompanyListArray)
+            CompanyListArray(idx).Name = CompanyListEntities(0)
+            CompanyListArray(idx).WKN = CompanyListEntities(1)
+            CompanyListArray(idx).ISIN = CompanyListEntities(2)
+            
+'''            'Search doubbles
+'''            Dim i As Long
+'''            For i = 0 To UBound(CompanyListArray) - 1
+'''                If CompanyListArray(i).WKN = CompanyListArray(idx).WKN Then
+'''                    List2.AddItem Zeile
+'''                End If
+'''            Next i
+            
+            ReDim Preserve CompanyListArray(0 To UBound(CompanyListArray) + 1)
+        End If
+                
+    Wend
+    ReDim Preserve CompanyListArray(0 To UBound(CompanyListArray) - 1)
+    Close CompanyListFile
+      
+     Exit Sub
+ReadCompanyListFileErr:
+    MsgBox CompanyListFilename & vbCr & Err.Description, , "xxxxx"
+End Sub
 

@@ -188,6 +188,7 @@ Private Sub C_ReadSingleShare_Click()
     
 End Sub
 
+
 Public Sub ReadCompanyListFile()
     Dim CompanyListFilename As String
     Dim CompanyListFile As Integer
@@ -234,7 +235,6 @@ Public Sub ReadCompanyListFile()
 ReadCompanyListFileErr:
     MsgBox CompanyListFilename & vbCr & Err.Description, , "xxxxx"
 End Sub
-
 
 Private Sub WriteHistoryFile(WKN As String, CurrentDate As String, SharePrice As String)
     Dim HistoryFileName As String

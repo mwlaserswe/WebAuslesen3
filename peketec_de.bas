@@ -33,7 +33,7 @@ Public Function Read_Peketec(WKN As String) As Integer
     Dim dmy As Double
     dmy = Zahl(AktuellerKurs)
     
-    Form1.L_WebPage = WebPage
+    ReadTodaysSharePrice.L_WebPage = WebPage
      ReadTodaysSharePrice.L_SharePrice = dmy
 '    L_WKN = WKN
 '    L_ISIN = ISIN

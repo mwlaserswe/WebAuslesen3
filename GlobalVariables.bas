@@ -68,6 +68,7 @@ Public AccessCnt As Long
 
 '=== today's share price ===
 Public CompanyListArray() As ShareItem
+Public CompPartialLstArr() As ShareItem
 
 
 

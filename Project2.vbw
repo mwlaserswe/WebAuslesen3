@@ -1,7 +1,10 @@
-Form1 = 112, -5, 1251, 900, I, 0, 0, 1230, 663, C
-Utilil = 216, 12, 1211, 916, C
+Form1 = 404, 42, 1543, 947, , 40, 17, 1274, 444, C
+Utilil = 289, 32, 1284, 936, 
 Chart = 52, -6, 1382, 875, 
-GlobalVariables = 129, 50, 1357, 700, 
-Utilities = 52, 52, 1280, 702, I
-peketec_de = 263, 111, 1352, 761, C
-ReadTodaysSharePrice = 151, 96, 1240, 746, C, 377, 225, 1466, 875, C
+GlobalVariables = 286, 93, 1514, 743, 
+Utilities = 13, 205, 1241, 855, 
+peketec_de = 263, 111, 1352, 761, Z
+ReadTodaysSharePrice = 151, 96, 1240, 746, , 183, 146, 1272, 796, C
+ChartList = 334, 273, 1423, 923, C, 104, 104, 1193, 754, C
+SaveWebpageAsHTML = 208, 208, 1497, 858, C, 473, 488, 1201, 878, C
+ScanWebForWKN = 45, 254, 1334, 904, , 202, 464, 1491, 1114, C
