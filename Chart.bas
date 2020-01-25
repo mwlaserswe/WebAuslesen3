@@ -265,7 +265,7 @@ End Sub
 ' Wenn der Kurs von unten durch den GD sticht, wird gekauft.
 ' Wenn der Kurs von oben unter den GD fällt, wird verkauft.
 '=====================================================================
-Public Sub Analyse_02()
+Public Sub Analyse_02(InvestmentStart As Long)
     Dim idx As Long
 '    Dim BuyNow As Boolean
     Dim SharePrice As Double
@@ -299,8 +299,8 @@ Public Sub Analyse_02()
     While idx <= UBound(ChartArray)
         Select Case Step
             Case 0:
-                ' no investment before T_InvestmentStart
-                If idx >= CLng(Zahl(Form1.T_InvestmentStart)) Then
+                ' no investment before InvestmentStart
+                If idx >= InvestmentStart Then
                     ChartArray(idx).Account = 0
                     ChartArray(idx).Trend = "0"
                     Step = 5

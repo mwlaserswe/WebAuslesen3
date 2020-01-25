@@ -11,6 +11,21 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.ListBox List1 
+      Height          =   1815
+      Left            =   8880
+      TabIndex        =   18
+      Top             =   240
+      Width           =   3615
+   End
+   Begin VB.CommandButton C_Investhopping 
+      Caption         =   "Invest Hopping"
+      Height          =   315
+      Left            =   7080
+      TabIndex        =   17
+      Top             =   960
+      Width           =   1215
+   End
    Begin VB.TextBox T_HistoryFileName 
       Height          =   375
       Left            =   720
@@ -91,7 +106,7 @@ Begin VB.Form Form1
       Width           =   255
    End
    Begin MSComDlg.CommonDialog DispChartDialog 
-      Left            =   15960
+      Left            =   16800
       Top             =   0
       _ExtentX        =   847
       _ExtentY        =   847
@@ -207,6 +222,67 @@ Dim cnt As Long
 
 
 
+Private Sub C_Investhopping_Click()
+    Dim idx As Long
+    Dim Fullpath As String
+    Dim CompPartialIdx As Long
+    Dim ChartArrayIdx As Long
+    Dim InvestmentStart As Long
+    Dim Zeile As String
+    Dim EarliestInvestStart As Long
+    Dim EarliestWKN As String
+    Dim EarliestCompany As String
+
+
+    InvestmentStart = 200
+    EarliestInvestStart = 99999999
+    
+'While idx < 4000
+
+    ' walk all companies in CompPartialLstArr
+    For CompPartialIdx = LBound(CompPartialLstArr) To UBound(CompPartialLstArr)
+        Zeile = ""
+    
+        Fullpath = App.Path & "\History\" & CompPartialLstArr(CompPartialIdx).WKN & ".txt"
+'        Zeile = CompPartialLstArr(CompPartialIdx).Name
+        
+        ReadHistoryFile Fullpath
+        
+        MovingAverage (SdLength)
+        Analyse_02 InvestmentStart
+        ' find earlest investment start point
+        For ChartArrayIdx = InvestmentStart To UBound(ChartArray)
+            If ChartArray(ChartArrayIdx).Trend = "10: Rise" Then
+                Exit For
+            End If
+        Next ChartArrayIdx
+'        Zeile = Zeile & " " & ChartArrayIdx
+        
+        If ChartArrayIdx < EarliestInvestStart Then
+            EarliestInvestStart = ChartArrayIdx
+            EarliestWKN = CompPartialLstArr(CompPartialIdx).WKN
+            EarliestCompany = CompPartialLstArr(CompPartialIdx).Name
+        End If
+        
+        Zeile = EarliestCompany & " " & EarliestWKN & " " & EarliestInvestStart
+        
+        
+        
+    Next CompPartialIdx
+    
+    List1.AddItem Zeile
+
+
+
+
+
+'Wend
+
+
+
+
+End Sub
+
 Private Sub C_WriteChart_Click()
     Dim ChartFilename As String
     Dim ChartFile As Integer
@@ -248,7 +324,7 @@ End Sub
 
 
 Private Sub FG_CompPartial_Click()
-    Dim FullPath As String
+    Dim Fullpath As String
     
     FG_CompPartial.Col = 0
     Form1.Caption = FG_CompPartial.Text
@@ -256,17 +332,17 @@ Private Sub FG_CompPartial_Click()
     ' FG_CompPartial.Row is selected with mouse
     FG_CompPartial.Col = 1
     
-    FullPath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
-    T_HistoryFileName.Text = FullPath
+    Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
+    T_HistoryFileName.Text = Fullpath
     
-    ReadHistoryFile FullPath
+    ReadHistoryFile Fullpath
 
     RefreshChart
 End Sub
 
 
 Private Sub FG_CompPartial_SelChange()
-    Dim FullPath As String
+    Dim Fullpath As String
     
     FG_CompPartial.Col = 0
     Form1.Caption = FG_CompPartial.Text
@@ -274,10 +350,10 @@ Private Sub FG_CompPartial_SelChange()
     ' FG_CompPartial.Row is cursor
     FG_CompPartial.Col = 1
     
-    FullPath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
-    T_HistoryFileName.Text = FullPath
+    Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
+    T_HistoryFileName.Text = Fullpath
     
-    ReadHistoryFile FullPath
+    ReadHistoryFile Fullpath
 
     RefreshChart
 End Sub
@@ -405,7 +481,7 @@ Private Sub HS_SD_Change()
 
     PicChart.Cls
     MovingAverage (SdLength)
-    Analyse_02
+    Analyse_02 Form1.T_InvestmentStart
     DispCoordinateSystem
     DisplayChart
 
@@ -623,7 +699,7 @@ End Sub
 Private Sub RefreshChart()
     PicChart.Cls
     MovingAverage (SdLength)
-    Analyse_02
+    Analyse_02 Form1.T_InvestmentStart
     DispCoordinateSystem
     DisplayChart
 End Sub
