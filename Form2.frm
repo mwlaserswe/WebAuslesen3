@@ -29,13 +29,13 @@ Begin VB.Form Form1
       _ExtentY        =   53
       _Version        =   393216
    End
-   Begin VB.CommandButton Command1 
-      Caption         =   "Command1"
+   Begin VB.CommandButton C_RefreshFlexGrid 
+      Caption         =   "Refresh FlexGrid"
       Height          =   495
-      Left            =   7440
+      Left            =   7080
       TabIndex        =   14
-      Top             =   600
-      Width           =   1215
+      Top             =   0
+      Width           =   855
    End
    Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
       Height          =   30
@@ -210,17 +210,15 @@ Dim cnt As Long
 Private Sub C_WriteChart_Click()
     Dim ChartFilename As String
     Dim ChartFile As Integer
-    Dim i As Integer
-'    Dim Prexit As String
-    
-    ChartFilename = App.Path & "\Chart.txt"
-    
-    ChartFile = FreeFile                'Nächste freie DateiNr.
-    On Error GoTo OpenError
-    Open ChartFilename For Output As ChartFile
-    
     Dim idx As Long
     Dim Zeile As String
+    
+    On Error GoTo OpenError
+    
+    ChartFilename = App.Path & "\Chart.txt"
+    ChartFile = FreeFile
+    Open ChartFilename For Output As ChartFile
+    
     For idx = 0 To UBound(ChartArray)
         Zeile = idx _
                 & vbTab & ChartArray(idx).Date _
@@ -231,34 +229,29 @@ Private Sub C_WriteChart_Click()
                 & vbTab & ChartArray(idx).Trend
          Print #ChartFile, Zeile
     Next idx
-        
-'        Date As String
-'    Value As Double
-'    SD As Double
-'    Distance As Double      ' Distance to moving average
-'    Account As Double
-'    Trend As String
-    
+           
     Close ChartFile
-    
     
     Exit Sub
 
 OpenError:
-  MsgBox ChartFilename, , "Write error"
+    MsgBox ChartFilename, , "Write error"
 
 End Sub
 
 
 
 
-Private Sub Command1_Click()
+Private Sub C_RefreshFlexGrid_Click()
      ArrayToFlexFrid CompPartialLstArr
 End Sub
 
 
 Private Sub FG_CompPartial_Click()
     Dim FullPath As String
+    
+    FG_CompPartial.Col = 0
+    Form1.Caption = FG_CompPartial.Text
     
     ' FG_CompPartial.Row is selected with mouse
     FG_CompPartial.Col = 1
@@ -274,6 +267,9 @@ End Sub
 
 Private Sub FG_CompPartial_SelChange()
     Dim FullPath As String
+    
+    FG_CompPartial.Col = 0
+    Form1.Caption = FG_CompPartial.Text
     
     ' FG_CompPartial.Row is cursor
     FG_CompPartial.Col = 1

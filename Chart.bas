@@ -146,6 +146,12 @@ Public Sub MovingAverage(Length As Long)
     Dim Sum As Double
     Dim Average As Double
     Dim Distance As Double
+    Static LastDistance As Double
+    
+    If UBound(ChartArray) <= Length Then
+        Exit Sub
+    End If
+    
     
     If Length = 0 Then
         Length = 1
@@ -169,8 +175,16 @@ Public Sub MovingAverage(Length As Long)
         Next i
         Average = Sum / Length
         ChartArray(idx).SD = Average
-        Distance = (ChartArray(idx).Value - Average) / ChartArray(idx).Value
+        
+        ' Share prises in history files sometimes are zero
+        ' Just avoid division by zero
+        If ChartArray(idx).Value = 0 Then
+            Distance = LastDistance
+        Else
+            Distance = (ChartArray(idx).Value - Average) / ChartArray(idx).Value
+        End If
         ChartArray(idx).Distance = Distance
+        LastDistance = Distance
     Next idx
 End Sub
 
@@ -274,25 +288,37 @@ Public Sub Analyse_02()
 '        ChartArray(idx).Account = SharePrice
 '    Next idx
     
-    idx = CLng(Zahl(Form1.T_InvestmentStart))
+'    idx = CLng(Zahl(Form1.T_InvestmentStart))
     
 '    SharePrice = 10
 '    SharePrice = ChartArray(idx).Value
-        
+    
+    idx = 0
     Step = 0
     
     While idx <= UBound(ChartArray)
         Select Case Step
             Case 0:
+                ' no investment before T_InvestmentStart
+                If idx >= CLng(Zahl(Form1.T_InvestmentStart)) Then
+                    ChartArray(idx).Account = 0
+                    ChartArray(idx).Trend = "0"
+                    Step = 5
+                Else
+                    ChartArray(idx).Account = 0
+                    ChartArray(idx).Trend = "0"
+                End If
+        
+            Case 5:
                 ' share price under GD now
                 If ChartArray(idx).Distance <= 0 Then
                     ChartArray(idx).Account = 0
-                    ChartArray(idx).Trend = "0:wait"
+                    ChartArray(idx).Trend = "5:wait"
                     Step = 10
                 ' wait until share price under GD
                 Else
                     ChartArray(idx).Account = 0
-                    ChartArray(idx).Trend = "0: wait"
+                    ChartArray(idx).Trend = "5: wait"
                 End If
             Case 10:
                 ' wait until share price is over GD again the first time
