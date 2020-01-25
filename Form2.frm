@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form Form1 
    Caption         =   "Web"
    ClientHeight    =   8025
@@ -10,11 +11,59 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox T_HistoryFileName 
+      Height          =   375
+      Left            =   720
+      TabIndex        =   16
+      Text            =   "Text1"
+      Top             =   3480
+      Width           =   6255
+   End
+   Begin MSFlexGridLib.MSFlexGrid MSFlexGrid2 
+      Height          =   30
+      Left            =   5160
+      TabIndex        =   15
+      Top             =   2880
+      Width           =   30
+      _ExtentX        =   53
+      _ExtentY        =   53
+      _Version        =   393216
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   495
+      Left            =   7440
+      TabIndex        =   14
+      Top             =   600
+      Width           =   1215
+   End
+   Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+      Height          =   30
+      Left            =   3360
+      TabIndex        =   13
+      Top             =   1320
+      Width           =   30
+      _ExtentX        =   53
+      _ExtentY        =   53
+      _Version        =   393216
+      Cols            =   4
+   End
+   Begin MSFlexGridLib.MSFlexGrid FG_CompPartial 
+      Height          =   3375
+      Left            =   720
+      TabIndex        =   12
+      Top             =   0
+      Width           =   6135
+      _ExtentX        =   10821
+      _ExtentY        =   5953
+      _Version        =   393216
+      Cols            =   4
+   End
    Begin VB.CommandButton C_WriteChart 
       Caption         =   "Write Chart to file"
       Height          =   495
       Left            =   11160
-      TabIndex        =   11
+      TabIndex        =   9
       Top             =   3240
       Width           =   1215
    End
@@ -23,7 +72,7 @@ Begin VB.Form Form1
       LargeChange     =   10
       Left            =   720
       Max             =   300
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   7200
       Width           =   3735
    End
@@ -37,7 +86,7 @@ Begin VB.Form Form1
       LargeChange     =   10
       Left            =   16920
       Max             =   100
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   3960
       Width           =   255
    End
@@ -47,14 +96,6 @@ Begin VB.Form Form1
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
-   End
-   Begin VB.CommandButton C_DrawChart 
-      Caption         =   "Draw Chart 1"
-      Height          =   495
-      Left            =   8160
-      TabIndex        =   2
-      Top             =   3240
-      Width           =   1215
    End
    Begin VB.PictureBox PicChart 
       Height          =   3135
@@ -77,7 +118,7 @@ Begin VB.Form Form1
       Caption         =   "Inverment Start"
       Height          =   255
       Left            =   6840
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   7320
       Width           =   1335
    End
@@ -85,7 +126,7 @@ Begin VB.Form Form1
       Caption         =   "GD"
       Height          =   255
       Left            =   4920
-      TabIndex        =   12
+      TabIndex        =   10
       Top             =   7320
       Width           =   255
    End
@@ -94,7 +135,7 @@ Begin VB.Form Form1
       Caption         =   "--"
       Height          =   255
       Left            =   5280
-      TabIndex        =   9
+      TabIndex        =   7
       Top             =   7320
       Width           =   735
    End
@@ -103,7 +144,7 @@ Begin VB.Form Form1
       Caption         =   "--"
       Height          =   255
       Left            =   15480
-      TabIndex        =   8
+      TabIndex        =   6
       Top             =   3600
       Width           =   1215
    End
@@ -112,7 +153,7 @@ Begin VB.Form Form1
       Caption         =   "--"
       Height          =   255
       Left            =   15360
-      TabIndex        =   7
+      TabIndex        =   5
       Top             =   3240
       Width           =   1215
    End
@@ -121,7 +162,7 @@ Begin VB.Form Form1
       Caption         =   "--"
       Height          =   255
       Left            =   14520
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   3240
       Width           =   1215
    End
@@ -130,18 +171,9 @@ Begin VB.Form Form1
       Caption         =   "--"
       Height          =   255
       Left            =   13800
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   3360
       Width           =   1215
-   End
-   Begin VB.Label L_ChartFile 
-      BorderStyle     =   1  'Fixed Single
-      Caption         =   "--"
-      Height          =   255
-      Left            =   720
-      TabIndex        =   3
-      Top             =   3480
-      Width           =   6975
    End
    Begin VB.Menu M_DisplayChart 
       Caption         =   "Display Chart"
@@ -172,140 +204,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 Dim cnt As Long
-
-Private Sub C_DrawChart_Click()
-    PicChart.Cls
-    DispCoordinateSystem
-    ReadChartFile
-    MovingAverage (SdLength)
-    Analyse_02
-    DisplayChart
-End Sub
-
-'''Private Sub C_ReadWKN_Click()
-'''
-'''Dim WKN_Start As Long
-'''Dim WKN_String As String
-'''Dim HtmlCode As String
-'''Dim URL_String As String
-'''Dim Zeile1 As String
-'''Dim Zeile2 As String
-'''
-'''
-'''
-'''
-'''
-'''Dim idx As Long
-'''
-'''WKN_Start = CLng(Zahl(T_WKNStart))
-'''WriteWknFile ("WKN-Start:" & WKN_Start)
-'''
-'''    Dim SearchItem As String
-'''    Dim EndString As String
-'''
-'''
-'''
-'''
-'''For idx = WKN_Start To WKN_Start + 1000000
-'''    WKN_String = Format(idx, "000000")
-'''    Label4 = WKN_String
-'''    URL_String = "https://peketec.de/portal/suche/?s=" & WKN_String
-'''
-'''    HtmlCode = GetHTMLCode(URL_String)
-'''    'SaveQuelltext HtmlCode, App.Path & "\HTML-Code.HTML"
-'''
-'''    'Bezeichnung ISIN WPKN extrahieren
-'''    SearchItem = "Bezeichnung"
-'''    EndString = "</table>"
-'''    Zeile1 = ExtraxtValue(HtmlCode, SearchItem, EndString)
-'''    Text1 = Zeile1
-'''
-'''        SearchItem = "portal"
-'''        EndString = "</tr>"
-'''        Zeile2 = ExtraxtValue(Zeile1, SearchItem, EndString)
-'''        Label6 = Zeile2
-'''
-'''    WriteWknFile (WKN_String & ":" & vbTab & Zeile2)
-'''
-'''
-'''Next idx
-
-
-
-
-
-'''End Sub
-
-
-'''Private Sub GetLastWkn()
-'''        Dim WknFileName As String
-'''        Dim WknFile As Integer
-'''        Dim Zeile As String
-'''        Dim WknEntities() As String
-'''        Dim idx As Long
-'''        Dim Number As Long
-'''
-'''        Dim LastWkn As Long
-'''
-'''
-'''        On Error GoTo ReadWknFileErr
-'''
-'''        WknFileName = App.Path & "\WKN.txt"
-'''        WknFile = FreeFile
-''''        Open ReadWknFileErr For Binary Access Read As Wknfile
-'''        Open WknFileName For Input As WknFile
-'''
-'''
-'''    While Not EOF(WknFile)
-'''        Line Input #WknFile, Zeile
-'''        Number = CLng(Zahl(Zeile))
-'''        If Number > 0 Then
-'''            LastWkn = Number
-'''        End If
-'''    Wend
-'''
-'''    T_WKNStart = LastWkn + 1
-'''
-'''    Close WknFile
-'''
-'''     Exit Sub
-'''ReadWknFileErr:
-'''    MsgBox WknFileName & vbCr & Err.Description, , "xxxxx"
-'''
-'''End Sub
-
-
-'''Private Sub WriteWknFile(Zeile As String)
-'''    Dim WknFileName As String
-'''    Dim WknFile As Integer
-'''    Dim i As Integer
-''''    Dim Prexit As String
-'''
-'''    WknFileName = App.Path & "\WKN.txt"
-'''
-'''    WknFile = FreeFile                'Nächste freie DateiNr.
-'''    On Error GoTo OpenError
-'''    Open WknFileName For Append As WknFile
-'''
-'''    Dim idx As Long
-'''
-'''    Print #WknFile, Zeile
-'''
-'''
-'''    Close WknFile
-'''
-'''
-'''    Exit Sub
-'''
-'''OpenError:
-'''  MsgBox WknFileName, , "Write error"
-'''
-'''End Sub
-
-
-
-
-
 
 
 
@@ -354,12 +252,40 @@ End Sub
 
 
 
-
-
-
-Private Sub Command2_Click()
-    Read_Peketec (T_WKN)
+Private Sub Command1_Click()
+     ArrayToFlexFrid CompPartialLstArr
 End Sub
+
+
+Private Sub FG_CompPartial_Click()
+    Dim FullPath As String
+    
+    ' FG_CompPartial.Row is selected with mouse
+    FG_CompPartial.Col = 1
+    
+    FullPath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
+    T_HistoryFileName.Text = FullPath
+    
+    ReadHistoryFile FullPath
+
+    RefreshChart
+End Sub
+
+
+Private Sub FG_CompPartial_SelChange()
+    Dim FullPath As String
+    
+    ' FG_CompPartial.Row is cursor
+    FG_CompPartial.Col = 1
+    
+    FullPath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
+    T_HistoryFileName.Text = FullPath
+    
+    ReadHistoryFile FullPath
+
+    RefreshChart
+End Sub
+
 
 Private Sub Form_Load()
 
@@ -421,9 +347,38 @@ Private Sub Form_Load()
     POSXY_Y = -(-PosAfterRotationX * Sin(rLineAngleRad) + PosAfterRotationY * Cos(rLineAngleRad))
     
 
+    ' Init FG_CompPartial FlexGrid
+            FG_CompPartial.Cols = 5
+        
+            FG_CompPartial.ColWidth(0) = 1600
+            FG_CompPartial.ColWidth(1) = 1000
+            FG_CompPartial.ColWidth(2) = 1500
+            FG_CompPartial.ColWidth(3) = 600
+            FG_CompPartial.Rows = 5
+            FG_CompPartial.FixedCols = 1      '1. Column fix
+            'FG_CompPartial.FixedRows = 1      '1. Row fix (not used here)
+            FG_CompPartial.Row = 0
+            FG_CompPartial.Col = 0: FG_CompPartial.Text = "Company"
+            FG_CompPartial.Col = 1: FG_CompPartial.Text = "WKN"
+            FG_CompPartial.Col = 2: FG_CompPartial.Text = "ISIN"
+            FG_CompPartial.Col = 3: FG_CompPartial.Text = "Index"
+            FG_CompPartial.Col = 4: FG_CompPartial.Text = "Status"
 
-
+    ' "\ISIN-WKN.txt" -> CompanyListArray()
+    CompanyFileToArray App.Path & "\ISIN-WKN.txt", CompanyListArray
     
+    
+    ArrayToFlexFrid CompanyListArray
+    FG_CompPartial.Rows = UBound(CompanyListArray) + 2
+            'Dim idx As Long
+            'For idx = 0 To UBound(CompanyListArray)
+            '     FG_CompPartial.Row = idx + 1
+            '    FG_CompPartial.Col = 0: FG_CompPartial.Text = CompanyListArray(idx).Name
+            '    FG_CompPartial.Col = 1: FG_CompPartial.Text = CompanyListArray(idx).WKN
+            '    FG_CompPartial.Col = 2: FG_CompPartial.Text = "--": FG_CompPartial.CellForeColor = RGB(0, 255, 0)
+            'Next idx
+
+
 
 
     SdLength = 20
@@ -446,6 +401,18 @@ Private Sub HS_SD_Change()
     Label11 = HS_SD.Value
     SdLength = HS_SD.Value
 
+    If (0 / 1) + (Not Not ChartArray) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
+
+
+    PicChart.Cls
+    MovingAverage (SdLength)
+    Analyse_02
+    DispCoordinateSystem
+    DisplayChart
+
 End Sub
 
 Private Sub M_Chartlist_Click()
@@ -457,6 +424,7 @@ Private Sub M_DisplayChart_Click()
 '    Dim EditFileName As String
     
     ' CancelError ist auf True gesetzt.
+    Dim HistoryFileName As String
     On Error GoTo errhandler
     
     
@@ -466,9 +434,9 @@ Private Sub M_DisplayChart_Click()
     DispChartDialog.Filter = "Share Files |*.csv; *.txt|"
     DispChartDialog.Filename = ""
     DispChartDialog.ShowOpen
-    ChartFilename = DispChartDialog.Filename
+    HistoryFileName = DispChartDialog.Filename
     
-    L_ChartFile = ChartFilename
+    T_HistoryFileName = HistoryFileName
 '    DefaultPath = Pfad$(DefaultStarKatalog)
 '    DefaultStarKatalog = EditFileName
     '  LastEditFileName = EditFileName
@@ -477,6 +445,14 @@ Private Sub M_DisplayChart_Click()
 '    INISetValue IniFileName, "Basics", "DefaultStarKatalog", DefaultStarKatalog
 '    LoadAlignmetStarFile
     
+    ReadHistoryFile HistoryFileName
+    
+    RefreshChart
+        'PicChart.Cls
+        'MovingAverage (SdLength)
+        'Analyse_02
+        'DispCoordinateSystem
+        'DisplayChart
 
     Exit Sub
   
@@ -541,7 +517,9 @@ Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single,
         OffsetLast.Y = GlbOffY
 
 '        PicChart.Cls
-        C_DrawChart_Click
+'''        C_DrawChart_Click
+        RefreshChart
+        
     End If
 
     If Button = 2 Then
@@ -560,44 +538,11 @@ Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single,
 ''        Timer1_Timer
         
 '        PicChart.Cls
-        C_DrawChart_Click
+'''        C_DrawChart_Click
+        RefreshChart
     End If
 
 End Sub
-
-'''Private Sub Timer1_Timer()
-'''    ' reconnect to webpage
-'''    If Not Timer2.Enabled Then
-'''        'C_ReadWKN1_Click
-'''    End If
-'''End Sub
-
-
-'''Private Sub C_ReadWKN1_Click()
-'''
-'''    GetLastWkn
-'''    WknReadCount = CDbl(Zahl(T_WknReadCount)) - 1
-'''    DelayTime = CDbl(Zahl(T_DelayTime))
-'''
-'''    WKS_Download_idx = CLng(Zahl(T_WKNStart))
-'''    WriteWknFile ("WKN-Start:" & WKS_Download_idx)
-'''    Timer2.Enabled = Not Timer2.Enabled
-'''
-'''    DownloadPause = 0
-'''End Sub
-
-
-
-
-'''Private Sub Timer_DisplayUpdate_Timer()
-'''    If Timer2.Enabled Then
-'''        C_ReadWKN1.BackColor = vbGreen
-'''    Else
-'''        C_ReadWKN1.BackColor = vbWhite
-'''    End If
-'''
-'''End Sub
-
 
 
 Private Sub VS_ScaleY_Change()
@@ -605,3 +550,85 @@ Private Sub VS_ScaleY_Change()
 '    PicChart.Cls
 '    C_DrawChart_Click
 End Sub
+
+
+Private Sub CompanyFileToArray(CompanyListFilename As String, CompanyListArray() As ShareItem)
+    Dim CompanyListFile As Integer
+    Dim Zeile As String
+    Dim CompanyListEntities() As String
+    Dim idx As Long
+    
+    ReDim CompanyListArray(0 To 0)
+'    MyList.Clear
+'    List2.Clear
+    
+    On Error GoTo ReadCompanyListFileErr
+    
+    'CompanyListFilename = App.Path & "\ISIN-WKN.txt"
+    CompanyListFile = FreeFile
+    Open CompanyListFilename For Input As CompanyListFile
+        
+    While Not EOF(CompanyListFile)
+        Line Input #CompanyListFile, Zeile
+        If Zeile <> "" Then
+            'MyList.AddItem Zeile
+            SepariereString Zeile, CompanyListEntities, vbTab
+            idx = UBound(CompanyListArray)
+            CompanyListArray(idx).Name = CompanyListEntities(0)
+            CompanyListArray(idx).WKN = CompanyListEntities(1)
+            CompanyListArray(idx).ISIN = CompanyListEntities(2)
+            If UBound(CompanyListEntities) >= 3 Then
+                CompanyListArray(idx).Index = CompanyListEntities(3)
+            End If
+
+            
+'''            'Search doubbles
+'''            Dim i As Long
+'''            For i = 0 To UBound(CompanyListArray) - 1
+'''                If CompanyListArray(i).WKN = CompanyListArray(idx).WKN Then
+'''                    List2.AddItem Zeile
+'''                End If
+'''            Next i
+            
+            ReDim Preserve CompanyListArray(0 To UBound(CompanyListArray) + 1)
+        End If
+                
+    Wend
+    ReDim Preserve CompanyListArray(0 To UBound(CompanyListArray) - 1)
+    Close CompanyListFile
+      
+     Exit Sub
+ReadCompanyListFileErr:
+    MsgBox CompanyListFilename & vbCr & Err.Description, , "xxxxx"
+End Sub
+
+Private Sub ArrayToFlexFrid(CompanyListArray() As ShareItem)
+    Dim idx As Long
+    
+    If (0 / 1) + (Not Not CompanyListArray) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
+
+
+    FG_CompPartial.Rows = UBound(CompanyListArray) + 2
+    For idx = 0 To UBound(CompanyListArray)
+        FG_CompPartial.Row = idx + 1
+        FG_CompPartial.Col = 0: FG_CompPartial.Text = CompanyListArray(idx).Name
+        FG_CompPartial.Col = 1: FG_CompPartial.Text = CompanyListArray(idx).WKN
+        FG_CompPartial.Col = 2: FG_CompPartial.Text = CompanyListArray(idx).ISIN
+        FG_CompPartial.Col = 3: FG_CompPartial.Text = CompanyListArray(idx).Index
+        FG_CompPartial.Col = 4: FG_CompPartial.Text = "--": FG_CompPartial.CellForeColor = RGB(0, 255, 0)
+    Next idx
+End Sub
+
+
+
+Private Sub RefreshChart()
+    PicChart.Cls
+    MovingAverage (SdLength)
+    Analyse_02
+    DispCoordinateSystem
+    DisplayChart
+End Sub
+

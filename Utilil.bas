@@ -120,3 +120,10 @@ ReadCompanyListFileErr:
     MsgBox CompanyListFilename & vbCr & Err.Description, , "xxxxx"
 End Sub
 
+
+
+
+
+
+
+

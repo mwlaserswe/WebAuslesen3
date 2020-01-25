@@ -70,10 +70,35 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Dim a
-    a = 1
+
+    Dim Zeile As String
+    Dim CompanyListEntities() As String
+    Dim idx As Long
+    
+    ReDim CompPartialLstArr(0 To 0)
+    
+    For idx = 0 To ListPartial.ListCount - 1
+        Zeile = ListPartial.List(idx)
+        SepariereString Zeile, CompanyListEntities, vbTab
+        CompPartialLstArr(idx).Name = CompanyListEntities(0)
+        CompPartialLstArr(idx).WKN = CompanyListEntities(1)
+        CompPartialLstArr(idx).ISIN = CompanyListEntities(2)
+          
+        ReDim Preserve CompPartialLstArr(0 To UBound(CompPartialLstArr) + 1)
+    Next idx
+                
+    ReDim Preserve CompPartialLstArr(0 To UBound(CompPartialLstArr) - 1)
 
 End Sub
+
+
+
+
+
+
+
+
+
 
 Private Sub ListCompelete_Click()
 '    CompanyIndex = ListCompelete.ListIndex

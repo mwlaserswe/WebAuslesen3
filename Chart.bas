@@ -18,26 +18,24 @@ Public Sub DispCoordinateSystem()
 '    GlbOffX = 100
 '    GlbOffY = 100
     'Draw Axis
-    Form1.PicChart.Line (GlbOffX, Form1.PicChart.Height - GlbOffY)-(GlbOffX + 7000, Form1.PicChart.Height - GlbOffY), ColorCoord
+    Form1.PicChart.Line (GlbOffX, Form1.PicChart.Height - GlbOffY)-(GlbOffX + 27000, Form1.PicChart.Height - GlbOffY), ColorCoord
     Form1.PicChart.Line (GlbOffX, Form1.PicChart.Height - GlbOffY)-(GlbOffX, Form1.PicChart.Height - (GlbOffY + 2000)), ColorCoord
     
 End Sub
 
 
-Public Sub ReadChartFile()
-        Dim ChartFile As Integer
-        Dim Zeile As String
-        Dim ChartEntities() As String
-        Dim idx As Long
-        
-        ReDim ChartArray(0 To 0)
-
-        On Error GoTo ReadChartFileErr
-        
-'        ChartFilename =
-        ChartFile = FreeFile
-'        Open ReadChartFileErr For Binary Access Read As Chartfile
-        Open ChartFilename For Input As ChartFile
+Public Sub ReadHistoryFile(HistoryFileName As String)
+    Dim ChartFile As Integer
+    Dim Zeile As String
+    Dim ChartEntities() As String
+    Dim idx As Long
+    
+    ReDim ChartArray(0 To 0)
+    
+    On Error GoTo ReadHistoryFileErr
+    
+    ChartFile = FreeFile
+    Open HistoryFileName For Input As ChartFile
         
     While Not EOF(ChartFile)
         Line Input #ChartFile, Zeile
@@ -51,10 +49,14 @@ Public Sub ReadChartFile()
     ReDim Preserve ChartArray(0 To UBound(ChartArray) - 1)
     Close ChartFile
       
-     Exit Sub
-ReadChartFileErr:
-    MsgBox ChartFilename & vbCr & Err.Description, , "xxxxx"
+    Exit Sub
+ReadHistoryFileErr:
+    MsgBox HistoryFileName & vbCr & Err.Description, , "xxxxx"
 End Sub
+
+
+
+
 
 
 Public Sub DisplayChart()

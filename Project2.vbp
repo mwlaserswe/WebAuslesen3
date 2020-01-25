@@ -12,6 +12,7 @@ Form=ChartList.frm
 Form=SaveWebpageAsHTML.frm
 Form=ScanWebForWKN.frm
 Form=ReadSingleShareValue.frm
+Object={5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0; MSFLXGRD.OCX
 IconForm="Form1"
 Startup="Form1"
 ExeName32="Project2.exe"

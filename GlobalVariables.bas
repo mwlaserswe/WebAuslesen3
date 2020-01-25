@@ -17,6 +17,7 @@ Public Type ShareItem
     Name As String
     WKN As String
     ISIN As String
+    Index As String
 End Type
 
 Public Type MousePos
