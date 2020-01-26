@@ -24,7 +24,7 @@ Public Sub DispCoordinateSystem()
 End Sub
 
 
-Public Sub ReadHistoryFile(HistoryFileName As String)
+Public Sub ReadHistoryFile(HistoryFileName As String, CompanyName As String)
     Dim ChartFile As Integer
     Dim Zeile As String
     Dim ChartEntities() As String
@@ -43,6 +43,8 @@ Public Sub ReadHistoryFile(HistoryFileName As String)
         idx = UBound(ChartArray)
         ChartArray(idx).Date = ChartEntities(0)
         ChartArray(idx).Value = Zahl(ChartEntities(4))
+        ChartArray(idx).WKN = HistoryFileName
+        ChartArray(idx).Name = CompanyName
                 
         ReDim Preserve ChartArray(0 To UBound(ChartArray) + 1)
     Wend
@@ -322,7 +324,7 @@ Public Sub Analyse_02(InvestmentStart As Long)
                 End If
             Case 10:
                 ' wait until share price is over GD again the first time
-                ' buy now
+                '*** buy now
                 If ChartArray(idx).Distance > 0 Then
                     SharePrice = ChartArray(idx).Value
                     StartSharePrice = ChartArray(idx).Value

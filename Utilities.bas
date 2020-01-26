@@ -633,7 +633,7 @@ End Sub
 
 Public Sub Add_List(CurrentForm As Form, Listbox As Control, Text As String)
 
-    Dim X&, Max&, Akt&, result&, cForm As Form
+    Dim X&, Max&, Akt&, Result&, cForm As Form
 
     Text = Text & "   "
 
@@ -651,7 +651,7 @@ Public Sub Add_List(CurrentForm As Form, Listbox As Control, Text As String)
     Next
     
     Max = Max \ Screen.TwipsPerPixelX
-    result = SendMessage(Listbox.hWnd, LB_SETHORIZONTAL, _
+    Result = SendMessage(Listbox.hWnd, LB_SETHORIZONTAL, _
                          Max, ByVal 0)
     
     Set cForm = Nothing
@@ -989,5 +989,29 @@ Dim ByteLocal(3) As Byte
     End If
     
 End Function
+
+
+Public Function FixLen(s1 As String, le As Long) As String
+    Dim i As Long
+    Dim s2 As String
+    
+    If Len(s1) < le Then
+        For i = Len(s1) To le - 1
+            s2 = s2 + " "
+        Next i
+        FixLen = s1 + s2
+    ElseIf Len(s1) > le Then
+        FixLen = Mid(s1, 1, le)
+    Else
+        FixLen = s1
+    End If
+    
+
+End Function
+
+
+
+
+
 
 

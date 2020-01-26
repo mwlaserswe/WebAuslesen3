@@ -123,6 +123,39 @@ End Sub
 
 
 
+Public Sub WriteAccountFile(AccountFilename As String)
+'    Dim AccountFilename As String
+    Dim AccountFile As Integer
+    Dim idx As Long
+    Dim Zeile As String
+    
+    On Error GoTo OpenError
+    
+'    AccountFilename = App.Path & "\Account.txt"
+    AccountFile = FreeFile
+    Open AccountFilename For Output As AccountFile
+    
+    For idx = 0 To UBound(AccountArray)
+        Zeile = idx _
+                & vbTab & FixLen(AccountArray(idx).Date, 10) _
+                & vbTab & FixLen(AccountArray(idx).Name, 8) _
+                & vbTab & FixLen(AccountArray(idx).WKN, 6) _
+                & vbTab & FixLen(Format(AccountArray(idx).Value, "0.00"), 7) _
+                & vbTab & FixLen(Format(AccountArray(idx).SD, "0.00"), 7) _
+                & vbTab & FixLen(Format(AccountArray(idx).Distance, "0.000000"), 12) _
+                & vbTab & FixLen(Format(AccountArray(idx).Account, "0.00"), 7) _
+                & vbTab & FixLen(AccountArray(idx).Trend, 8)
+         Print #AccountFile, Zeile
+    Next idx
+           
+    Close AccountFile
+    
+    Exit Sub
+
+OpenError:
+    MsgBox AccountFilename, , "Write error"
+
+End Sub
 
 
 

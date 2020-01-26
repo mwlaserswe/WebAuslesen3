@@ -11,6 +11,14 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   495
+      Left            =   13440
+      TabIndex        =   19
+      Top             =   720
+      Width           =   1215
+   End
    Begin VB.ListBox List1 
       Height          =   1815
       Left            =   8880
@@ -218,7 +226,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-Dim cnt As Long
+Dim Cnt As Long
 
 
 
@@ -232,51 +240,83 @@ Private Sub C_Investhopping_Click()
     Dim EarliestInvestStart As Long
     Dim EarliestWKN As String
     Dim EarliestCompany As String
-
+    Dim InvestmentHold As Long
+Dim Cnt As Long
 
     InvestmentStart = 200
-    EarliestInvestStart = 99999999
     
-'While idx < 4000
+    Do
 
-    ' walk all companies in CompPartialLstArr
-    For CompPartialIdx = LBound(CompPartialLstArr) To UBound(CompPartialLstArr)
-        Zeile = ""
-    
-        Fullpath = App.Path & "\History\" & CompPartialLstArr(CompPartialIdx).WKN & ".txt"
-'        Zeile = CompPartialLstArr(CompPartialIdx).Name
+            EarliestInvestStart = 99999999
         
-        ReadHistoryFile Fullpath
+            '*** walk all companies in CompPartialLstArr
+            For CompPartialIdx = LBound(CompPartialLstArr) To UBound(CompPartialLstArr)
+                Zeile = ""
+            
+                Fullpath = App.Path & "\History\" & CompPartialLstArr(CompPartialIdx).WKN & ".txt"
+        '        Zeile = CompPartialLstArr(CompPartialIdx).Name
+                
+                ReadHistoryFile Fullpath, CompPartialLstArr(CompPartialIdx).Name
+                MovingAverage (SdLength)
+                Analyse_02 InvestmentStart
+                '*** find earlest investment start point in all companies
+                For ChartArrayIdx = InvestmentStart To UBound(ChartArray)
+                    If ChartArray(ChartArrayIdx).Trend = "10: Rise" Then
+                        Exit For
+                    End If
+                Next ChartArrayIdx
+        '        Zeile = Zeile & " " & ChartArrayIdx
+                
+                If ChartArrayIdx < EarliestInvestStart Then
+                    EarliestInvestStart = ChartArrayIdx
+                    EarliestWKN = CompPartialLstArr(CompPartialIdx).WKN
+                    EarliestCompany = CompPartialLstArr(CompPartialIdx).Name
+                End If
+                
+                '*** earlieset company found
+                Zeile = EarliestCompany & " Start: " & EarliestWKN & " " & EarliestInvestStart
+                
+                
+                
+                
+            Next CompPartialIdx
+            
+            Fullpath = App.Path & "\History\" & EarliestWKN & ".txt"
+            ReadHistoryFile Fullpath, EarliestCompany
+            MovingAverage (SdLength)
+            Analyse_02 InvestmentStart
+            
+            '*** find next HOLD
+            For ChartArrayIdx = EarliestInvestStart To UBound(ChartArray)
+                If ChartArray(ChartArrayIdx).Trend = "20: Hold" Then
+                    InvestmentHold = ChartArrayIdx
+                    Exit For
+                End If
+            Next ChartArrayIdx
         
-        MovingAverage (SdLength)
-        Analyse_02 InvestmentStart
-        ' find earlest investment start point
-        For ChartArrayIdx = InvestmentStart To UBound(ChartArray)
-            If ChartArray(ChartArrayIdx).Trend = "10: Rise" Then
-                Exit For
-            End If
-        Next ChartArrayIdx
-'        Zeile = Zeile & " " & ChartArrayIdx
+            ReDim Preserve AccountArray(0 To UBound(ChartArray))
+            
+            For idx = EarliestInvestStart To InvestmentHold
+                AccountArray(idx) = ChartArray(idx)
+            Next idx
         
-        If ChartArrayIdx < EarliestInvestStart Then
-            EarliestInvestStart = ChartArrayIdx
-            EarliestWKN = CompPartialLstArr(CompPartialIdx).WKN
-            EarliestCompany = CompPartialLstArr(CompPartialIdx).Name
-        End If
-        
-        Zeile = EarliestCompany & " " & EarliestWKN & " " & EarliestInvestStart
+            '*** prepare next investment start
+            InvestmentStart = ChartArrayIdx
+            
+            Zeile = EarliestCompany & " Start: " & EarliestWKN & " " & EarliestInvestStart & ";  Stop: " & ChartArrayIdx
         
         
-        
-    Next CompPartialIdx
-    
-    List1.AddItem Zeile
+            List1.AddItem Zeile
+            
+            Cnt = Cnt + 1
+            T_HistoryFileName.Text = Cnt
+            
+            DoEvents
+            
+    Loop While InvestmentStart < 1000
 
 
-
-
-
-'Wend
+    WriteAccountFile App.Path & "\Account.txt"
 
 
 
@@ -322,6 +362,35 @@ Private Sub C_RefreshFlexGrid_Click()
      ArrayToFlexFrid CompPartialLstArr
 End Sub
 
+
+Private Sub Command1_Click()
+            ReDim Preserve AccountArray(0 To 2)
+            
+AccountArray(0).Account = 77.8
+AccountArray(0).Date = "2020-01-22"
+AccountArray(0).Distance = 0.4
+AccountArray(0).Name = "123456789"
+AccountArray(0).SD = 34
+AccountArray(0).Trend = "30: Rise"
+AccountArray(0).Value = 75
+AccountArray(0).WKN = "123456"
+
+AccountArray(1).Account = 77.8
+AccountArray(1).Date = "2020-01-22"
+AccountArray(1).Distance = 0.4
+AccountArray(1).Name = "ABCDEFGHI"
+AccountArray(1).SD = 34
+AccountArray(1).Trend = "30: Rise"
+AccountArray(1).Value = 75
+AccountArray(1).WKN = "123456"
+
+          
+            
+
+
+    WriteAccountFile App.Path & "\Account.txt"
+
+End Sub
 
 Private Sub FG_CompPartial_Click()
     Dim Fullpath As String
@@ -453,7 +522,7 @@ Private Sub Form_Load()
 
 
 
-    SdLength = 20
+    SdLength = 200
     HS_SD.Value = SdLength
     GlbScaleX = 3
     GlbScaleY = 20

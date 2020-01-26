@@ -3,6 +3,8 @@ Option Explicit
 
 Public Type ChartItem
     Date As String
+    Name As String
+    WKN As String
     Value As Double
     SD As Double
     Distance As Double      ' Distance to moving average
@@ -71,6 +73,7 @@ Public AccessCnt As Long
 Public CompanyListArray() As ShareItem
 Public CompPartialLstArr() As ShareItem
 
+Public AccountArray() As ChartItem
 
 
 
