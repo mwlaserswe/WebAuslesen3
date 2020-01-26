@@ -5162,3 +5162,4 @@ Datum;Erster;Hoch;Tief;Schlusskurs;Stuecke;Volumen
 23.01.2020; ; ; ;14,72
 24.01.2020; ; ; ;14,77
 25.01.2020; ; ; ;14,77
+26.01.2020; ; ; ;14,77
