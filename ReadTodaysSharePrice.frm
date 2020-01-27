@@ -145,19 +145,6 @@ Private Sub C_ReadAllShares_Click()
     Share_Download_idx = LBound(CompanyListArray)
     Timer1.Enabled = True
     List1.Clear
-
-
-'''    List1.Clear
-'''
-'''    Dim i As Long
-'''    For i = LBound(CompanyListArray) To UBound(CompanyListArray)
-'''        Read_Peketec (CompanyListArray(i).WKN)
-'''        L_Name = CompanyListArray(i).Name
-'''        L_WKN = CompanyListArray(i).WKN
-'''        L_ISIN = CompanyListArray(i).ISIN
-'''        List1.AddItem CompanyListArray(i).Name & "  " & CompanyListArray(i).WKN & "  " & L_SharePrice
-'''        WriteHistoryFile CompanyListArray(i).WKN, Date, L_SharePrice
-'''    Next i
     
 End Sub
 

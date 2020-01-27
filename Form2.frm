@@ -11,6 +11,14 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox T_StartSharePrice 
+      Height          =   285
+      Left            =   10560
+      TabIndex        =   20
+      Text            =   "100"
+      Top             =   7320
+      Width           =   615
+   End
    Begin VB.CommandButton Command1 
       Caption         =   "Command1"
       Height          =   495
@@ -28,11 +36,11 @@ Begin VB.Form Form1
    End
    Begin VB.CommandButton C_Investhopping 
       Caption         =   "Invest Hopping"
-      Height          =   315
+      Height          =   555
       Left            =   7080
       TabIndex        =   17
       Top             =   960
-      Width           =   1215
+      Width           =   1455
    End
    Begin VB.TextBox T_HistoryFileName 
       Height          =   375
@@ -131,19 +139,27 @@ Begin VB.Form Form1
    End
    Begin VB.TextBox T_InvestmentStart 
       Height          =   285
-      Left            =   8280
+      Left            =   7680
       TabIndex        =   0
       Text            =   "200"
       Top             =   7320
-      Width           =   1215
+      Width           =   615
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Start Share Price [€]"
+      Height          =   255
+      Left            =   8880
+      TabIndex        =   21
+      Top             =   7320
+      Width           =   1575
    End
    Begin VB.Label Label13 
       Caption         =   "Inverment Start"
       Height          =   255
-      Left            =   6840
+      Left            =   6480
       TabIndex        =   11
       Top             =   7320
-      Width           =   1335
+      Width           =   1095
    End
    Begin VB.Label Label12 
       Caption         =   "GD"
@@ -241,9 +257,11 @@ Private Sub C_Investhopping_Click()
     Dim EarliestWKN As String
     Dim EarliestCompany As String
     Dim InvestmentHold As Long
+    Dim StartPriceRisePeriode As Double
 Dim Cnt As Long
 
     InvestmentStart = 200
+    StartPriceRisePeriode = T_StartSharePrice
     
     Do
 
@@ -258,7 +276,7 @@ Dim Cnt As Long
                 
                 ReadHistoryFile Fullpath, CompPartialLstArr(CompPartialIdx).Name
                 MovingAverage (SdLength)
-                Analyse_02 InvestmentStart
+                Analyse_02 InvestmentStart, 0
                 '*** find earlest investment start point in all companies
                 For ChartArrayIdx = InvestmentStart To UBound(ChartArray)
                     If ChartArray(ChartArrayIdx).Trend = "10: Rise" Then
@@ -284,7 +302,7 @@ Dim Cnt As Long
             Fullpath = App.Path & "\History\" & EarliestWKN & ".txt"
             ReadHistoryFile Fullpath, EarliestCompany
             MovingAverage (SdLength)
-            Analyse_02 InvestmentStart
+            Analyse_02 InvestmentStart, StartPriceRisePeriode
             
             '*** find next HOLD
             For ChartArrayIdx = EarliestInvestStart To UBound(ChartArray)
@@ -299,6 +317,7 @@ Dim Cnt As Long
             ' No-Invest periode
             For idx = InvestmentStart To EarliestInvestStart - 1
                 AccountArray(idx).Name = "No Inv."
+                AccountArray(idx).Account = -1
             Next idx
 
             ' Invest periode
@@ -307,6 +326,7 @@ Dim Cnt As Long
             Next idx
         
             '*** prepare next investment start
+            StartPriceRisePeriode = ChartArray(InvestmentHold).Account
             InvestmentStart = ChartArrayIdx + 1
             
             Zeile = EarliestCompany & " Start: " & EarliestWKN & " " & EarliestInvestStart & ";  Stop: " & ChartArrayIdx
@@ -404,13 +424,13 @@ Private Sub FG_CompPartial_Click()
     FG_CompPartial.Col = 0
     Form1.Caption = FG_CompPartial.Text
     
-    ' FG_CompPartial.Row is selected with mouse
-    FG_CompPartial.Col = 1
-    
+    ' FG_CompPartial.Row is cursor
+    FG_CompPartial.Col = 1  ' Point to WKN columnn
     Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
     T_HistoryFileName.Text = Fullpath
     
-    ReadHistoryFile Fullpath
+    FG_CompPartial.Col = 0  ' Point to company name columnn
+    ReadHistoryFile Fullpath, FG_CompPartial.Text
 
     RefreshChart
 End Sub
@@ -423,12 +443,12 @@ Private Sub FG_CompPartial_SelChange()
     Form1.Caption = FG_CompPartial.Text
     
     ' FG_CompPartial.Row is cursor
-    FG_CompPartial.Col = 1
-    
+    FG_CompPartial.Col = 1  ' Point to WKN columnn
     Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
     T_HistoryFileName.Text = Fullpath
     
-    ReadHistoryFile Fullpath
+    FG_CompPartial.Col = 0  ' Point to company name columnn
+    ReadHistoryFile Fullpath, FG_CompPartial.Text
 
     RefreshChart
 End Sub
@@ -556,7 +576,7 @@ Private Sub HS_SD_Change()
 
     PicChart.Cls
     MovingAverage (SdLength)
-    Analyse_02 Form1.T_InvestmentStart
+    Analyse_02 Form1.T_InvestmentStart, T_StartSharePrice
     DispCoordinateSystem
     DisplayChart
 
@@ -567,14 +587,10 @@ Private Sub M_Chartlist_Click()
 End Sub
 
 Private Sub M_DisplayChart_Click()
-'    Dim Befehlszeile As String
-'    Dim EditFileName As String
-    
-    ' CancelError ist auf True gesetzt.
     Dim HistoryFileName As String
+    
     On Error GoTo errhandler
-    
-    
+        
     DispChartDialog.CancelError = True
     DispChartDialog.InitDir = App.Path
     'DispChartDialog.Filter = "CSV-Datei (*.csv)|*.csv|Text-Datei (*.txt)|*.txt"
@@ -584,22 +600,10 @@ Private Sub M_DisplayChart_Click()
     HistoryFileName = DispChartDialog.Filename
     
     T_HistoryFileName = HistoryFileName
-'    DefaultPath = Pfad$(DefaultStarKatalog)
-'    DefaultStarKatalog = EditFileName
-    '  LastEditFileName = EditFileName
     
-'    INISetValue IniFileName, "Basics", "DefaultPath", DefaultPath
-'    INISetValue IniFileName, "Basics", "DefaultStarKatalog", DefaultStarKatalog
-'    LoadAlignmetStarFile
-    
-    ReadHistoryFile HistoryFileName
+    ReadHistoryFile HistoryFileName, ""
     
     RefreshChart
-        'PicChart.Cls
-        'MovingAverage (SdLength)
-        'Analyse_02
-        'DispCoordinateSystem
-        'DisplayChart
 
     Exit Sub
   
@@ -628,17 +632,6 @@ Private Sub M_ScanWebForWKN_Click()
 End Sub
 
 Private Sub PicChart_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-'    Label4 = Shift
-'    Label5 = X
-'    Label6 = Y
-'    Label7 = Button
-'    If Button = 1 Then
-'        MouseDnPos.X = X
-'        MouseDnPos.Y = Y
-'    End If
-'
-'    If Button = 2 Then
-'    End If
     
     MouseDnPos.X = X
     MouseDnPos.Y = Y
@@ -648,10 +641,6 @@ Private Sub PicChart_MouseDown(Button As Integer, Shift As Integer, X As Single,
 End Sub
 
 Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
-'    Label4 = Shift
-'    Label5 = X
-'    Label6 = Y
-'    Label7 = Button
     
     If Button = 1 Then
         MouseMove.X = X - MouseDnPos.X
@@ -774,7 +763,7 @@ End Sub
 Private Sub RefreshChart()
     PicChart.Cls
     MovingAverage (SdLength)
-    Analyse_02 Form1.T_InvestmentStart
+    Analyse_02 Form1.T_InvestmentStart, T_StartSharePrice
     DispCoordinateSystem
     DisplayChart
 End Sub

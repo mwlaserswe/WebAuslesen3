@@ -43,7 +43,7 @@ Public Sub ReadHistoryFile(HistoryFileName As String, CompanyName As String)
         idx = UBound(ChartArray)
         ChartArray(idx).Date = ChartEntities(0)
         ChartArray(idx).Value = Zahl(ChartEntities(4))
-        ChartArray(idx).WKN = HistoryFileName
+        ChartArray(idx).WKN = DateiName$(NameOhneKennung$(HistoryFileName))
         ChartArray(idx).Name = CompanyName
                 
         ReDim Preserve ChartArray(0 To UBound(ChartArray) + 1)
@@ -62,32 +62,7 @@ End Sub
 
 
 Public Sub DisplayChart()
-'''    Dim idx As Long
-'''
-'''    'idx 0 is the head line
-'''    idx = 1
-'''    Form1.PicChart.PSet ((GlbOffX + idx) * GlbScaleX, Form1.PicChart.Height - (GlbOffY + ChartArray(idx).Value * 10)), ColorCoord
-'''
-'''
-'''    For idx = 1 To UBound(ChartArray)
-'''        Form1.PicChart.Line (Form1.PicChart.CurrentX, Form1.PicChart.CurrentY)-((GlbOffX + idx) * GlbScaleX, Form1.PicChart.Height - (GlbOffY + ChartArray(idx).Value * GlbScaleY)), ColorCoord
-'''    Next idx
-'''
-'''
-'''    'idx 0 is the head line
-'''    idx = 1
-'''    Form1.PicChart.PSet ((GlbOffX + idx) * GlbScaleX, Form1.PicChart.Height - (GlbOffY + ChartArray(idx).Value * 10)), ColorCoord
-'''
-'''
-'''    Dim DistanceColor As Long
-'''    For idx = 1 To UBound(ChartArray)
-'''        If ChartArray(idx).Distance > 0 Then
-'''            DistanceColor = vbGreen
-'''        Else
-'''             DistanceColor = vbBlue
-'''       End If
-'''        Form1.PicChart.Line (Form1.PicChart.CurrentX, Form1.PicChart.CurrentY)-((GlbOffX + idx) * GlbScaleX, Form1.PicChart.Height - (GlbOffY + ChartArray(idx).SD * GlbScaleY)), DistanceColor
-'''    Next idx
+
     Dim idx As Long
 
     'idx 0 is the head line
@@ -113,19 +88,6 @@ Public Sub DisplayChart()
         DrawLine CDbl(idx), ChartArray(idx).SD, DistanceColor
     Next idx
     
-    
-'''    Form1.PicChart.PSet ((idx * GlbScaleX) + GlbOffX, Form1.PicChart.Height - (ChartArray(idx).Value * GlbScaleY) - GlbOffY), ColorCoord
-'''
-'''
-'''    Dim DistanceColor As Long
-'''    For idx = 1 To UBound(ChartArray)
-'''        If ChartArray(idx).Distance > 0 Then
-'''            DistanceColor = vbGreen
-'''        Else
-'''             DistanceColor = vbBlue
-'''       End If
-'''       Form1.PicChart.Line (Form1.PicChart.CurrentX, Form1.PicChart.CurrentY)-((idx * GlbScaleX) + GlbOffX, Form1.PicChart.Height - (ChartArray(idx).SD * GlbScaleY) - GlbOffY), DistanceColor
-'''    Next idx
 
     idx = 1
     DrawStart CDbl(idx), ChartArray(idx).Value, vbBlack
@@ -133,10 +95,6 @@ Public Sub DisplayChart()
         DrawLine CDbl(idx), ChartArray(idx).Account, vbBlack
     Next idx
     
-    
-'    For idx = 1 To UBound(ChartArray)
-'        Form1.PicChart.Line (Form1.PicChart.CurrentX, Form1.PicChart.CurrentY)-((idx * GlbScaleX) + GlbOffX, Form1.PicChart.Height - (ChartArray(idx).Account * Form1.VS_ScaleY.Value / 5) - GlbOffY), vbBlack
-'    Next idx
 
 
 End Sub
@@ -266,34 +224,17 @@ End Sub
 '           bis der Kurs von unten durch den GS sticht.
 ' Wenn der Kurs von unten durch den GD sticht, wird gekauft.
 ' Wenn der Kurs von oben unter den GD fällt, wird verkauft.
+' InvestmentStart: Der Index im History file
+' StartAccount: Die Investitionssumme
 '=====================================================================
-Public Sub Analyse_02(InvestmentStart As Long)
+Public Sub Analyse_02(InvestmentStart As Long, StartAccount As Double)
     Dim idx As Long
-'    Dim BuyNow As Boolean
-    Dim SharePrice As Double
     Dim ReadyForFirstRise As Boolean
     Dim Step As Long
-    
-    Static StartAccount As Double
-    
-    
-    
     Dim CostFactor As Double
+    
     CostFactor = 0.9926
-    
-    
-    
-
-    SharePrice = 1
-'    ChartArray(idx).Account = SharePrice
-'    For idx = 0 To 1
-'        ChartArray(idx).Account = SharePrice
-'    Next idx
-    
-'    idx = CLng(Zahl(Form1.T_InvestmentStart))
-    
-'    SharePrice = 10
-'    SharePrice = ChartArray(idx).Value
+'    CostFactor = 0.991
     
     idx = 0
     Step = 0
@@ -326,12 +267,10 @@ Public Sub Analyse_02(InvestmentStart As Long)
                 ' wait until share price is over GD again the first time
                 '*** buy now
                 If ChartArray(idx).Distance > 0 Then
-                    SharePrice = ChartArray(idx).Value
                     StartSharePrice = ChartArray(idx).Value
-                    ChartArray(idx).Account = SharePrice
+                    ChartArray(idx).Account = (ChartArray(idx).Value / StartSharePrice) * StartAccount
                     ' Remove transfer costs
                     ChartArray(idx).Account = ChartArray(idx).Account * CostFactor
-                    StartAccount = ChartArray(idx).Account
                     ChartArray(idx).Trend = "10: Rise"
                     Step = 20
                 Else
@@ -365,111 +304,9 @@ Public Sub Analyse_02(InvestmentStart As Long)
                 End If
             
         End Select
-        
-        
-'''        If ChartArray(idx).Distance > 0 Then
-'''            If ReadyForFirstRise Then
-'''                ChartArray(idx).Trend = "Rise"
-'''                If Rise = False Then
-'''                    StartSharePrice = ChartArray(idx).Value
-'''                    StartAccount = ChartArray(idx - 1).Account
-'''    '                BuyNow = True
-'''                Else
-'''    '                BuyNow = False
-'''                End If
-'''
-'''                Rise = True
-'''            End If
-'''        Else
-'''             ChartArray(idx).Trend = "Hold"
-'''            If Rise = True Then
-'''                ChartArray(idx - 1).Account = ChartArray(idx - 1).Account * 0.985
-'''            End If
-'''            ReadyForFirstRise = True
-'''            Rise = False
-'''        End If
-'''
-'''        If Rise Then
-'''            ChartArray(idx).Account = ChartArray(idx).Value / StartSharePrice * StartAccount
-'''        Else
-'''            ChartArray(idx).Account = ChartArray(idx - 1).Account
-'''        End If
-        
       
     idx = idx + 1
     Wend
-    
-'    For idx = Length To UBound(ChartArray)
-'
-'    Next idx
-
-
-
-
-
-
-''    Dim idx As Long
-'''    Dim BuyNow As Boolean
-''    Dim SharePrice As Double
-''    Dim Rise As Boolean
-''    Dim ReadyForFirstRise As Boolean
-''
-''
-''    SharePrice = 1
-'''    ChartArray(idx).Account = SharePrice
-'''    For idx = 0 To 1
-'''        ChartArray(idx).Account = SharePrice
-'''    Next idx
-''
-''    idx = CLng(Zahl(Form1.T_InvestmentStart))
-''
-'''    SharePrice = 10
-''    SharePrice = ChartArray(idx).Value
-''
-''    ChartArray(idx).Account = SharePrice
-''    ChartArray(idx + 1).Account = SharePrice
-''    ChartArray(idx - 1).Account = SharePrice
-''    Rise = False
-''
-''    While idx <= UBound(ChartArray)
-''        If ChartArray(idx).Distance > 0 Then
-''            If ReadyForFirstRise Then
-''                ChartArray(idx).Trend = "Rise"
-''                If Rise = False Then
-''                    StartSharePrice = ChartArray(idx).Value
-''                    StartAccount = ChartArray(idx - 1).Account
-''    '                BuyNow = True
-''                Else
-''    '                BuyNow = False
-''                End If
-''
-''                Rise = True
-''            End If
-''        Else
-''             ChartArray(idx).Trend = "Hold"
-''            If Rise = True Then
-''                ChartArray(idx - 1).Account = ChartArray(idx - 1).Account * 0.985
-''            End If
-''            ReadyForFirstRise = True
-''            Rise = False
-''        End If
-''
-''        If Rise Then
-''            ChartArray(idx).Account = ChartArray(idx).Value / StartSharePrice * StartAccount
-'''    If ChartArray(idx).Account > 1000 Then
-'''        ChartArray(idx).Account = 1000
-'''    End If
-''        Else
-''            ChartArray(idx).Account = ChartArray(idx - 1).Account
-''        End If
-''
-''
-''    idx = idx + 1
-''    Wend
-''
-'''    For idx = Length To UBound(ChartArray)
-'''
-'''    Next idx
     
 End Sub
 

@@ -69,6 +69,7 @@ Private Sub Form_Load()
     CompanyIndex = -1       ' -1 means no list item selected
 End Sub
 
+
 Private Sub Form_Unload(Cancel As Integer)
 
     Dim Zeile As String
@@ -92,18 +93,6 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 
-
-
-
-
-
-
-
-
-Private Sub ListCompelete_Click()
-'    CompanyIndex = ListCompelete.ListIndex
-'    CompanyEntry = ListCompelete.List(CompanyIndex)
-End Sub
 
 Private Sub Text1_Change()
     Dim k As Long
