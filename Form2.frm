@@ -296,12 +296,18 @@ Dim Cnt As Long
         
             ReDim Preserve AccountArray(0 To UBound(ChartArray))
             
+            ' No-Invest periode
+            For idx = InvestmentStart To EarliestInvestStart - 1
+                AccountArray(idx).Name = "No Inv."
+            Next idx
+
+            ' Invest periode
             For idx = EarliestInvestStart To InvestmentHold
                 AccountArray(idx) = ChartArray(idx)
             Next idx
         
             '*** prepare next investment start
-            InvestmentStart = ChartArrayIdx
+            InvestmentStart = ChartArrayIdx + 1
             
             Zeile = EarliestCompany & " Start: " & EarliestWKN & " " & EarliestInvestStart & ";  Stop: " & ChartArrayIdx
         
