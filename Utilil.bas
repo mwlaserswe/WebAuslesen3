@@ -158,5 +158,32 @@ OpenError:
 End Sub
 
 
+' FormatDate
+' Input:  20.12.1965
+' Output: 1965-12-20
+Public Function FormatDate(DString As String) As String
+    Dim DateEntities() As String
+
+    If InStr(DString, "-") Then
+        FormatDate = DString
+    ElseIf InStr(DString, ".") Then
+        SepariereString DString, DateEntities, "."
+        FormatDate = DateEntities(2) & "-" & DateEntities(1) & "-" & DateEntities(0)
+    Else
+        FormatDate = "0000-00-00"
+    End If
+End Function
+
+
+Public Function TodayFunction() As String
+    Dim DateTimeString As String
+    Dim DateString As String
+    Dim SepArray() As String
+    
+    DateTimeString = Now
+    SepariereString DateTimeString, SepArray, " "
+    TodayFunction = FormatDate(SepArray(0))
+End Function
+
 
 

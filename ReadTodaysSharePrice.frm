@@ -237,7 +237,7 @@ Private Sub WriteHistoryFile(WKN As String, CurrentDate As String, SharePrice As
     
     Dim idx As Long
     
-    Zeile = CurrentDate & "; ; ; ;" & SharePrice
+    Zeile = FormatDate(CurrentDate) & "; ; ; ;" & SharePrice
     Print #HistoryFile, Zeile
 
     

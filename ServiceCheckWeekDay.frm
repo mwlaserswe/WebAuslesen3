@@ -10,82 +10,122 @@ Begin VB.Form ServiceCheckWeekDay
    ScaleHeight     =   5700
    ScaleWidth      =   14145
    StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      Caption         =   "Demos"
+      Height          =   2895
+      Left            =   240
+      TabIndex        =   4
+      Top             =   2520
+      Width           =   4095
+      Begin VB.CommandButton C_TageszahlInDatum 
+         Caption         =   "Tageszahl ab 01.01.2000 in Datum"
+         Height          =   855
+         Left            =   240
+         TabIndex        =   11
+         Top             =   1560
+         Width           =   1215
+      End
+      Begin VB.TextBox Text4 
+         Height          =   285
+         Left            =   2040
+         TabIndex        =   10
+         Text            =   "375"
+         Top             =   1680
+         Width           =   495
+      End
+      Begin VB.TextBox Text5 
+         Height          =   285
+         Left            =   2040
+         TabIndex        =   9
+         Text            =   "--"
+         Top             =   2040
+         Width           =   1215
+      End
+      Begin VB.CommandButton C_WeekdayDemo 
+         Caption         =   "Weekday Demo"
+         Height          =   495
+         Left            =   240
+         TabIndex        =   7
+         Top             =   360
+         Width           =   1215
+      End
+      Begin VB.TextBox Text1 
+         Height          =   285
+         Left            =   1800
+         TabIndex        =   6
+         Text            =   "27.1.2020"
+         Top             =   360
+         Width           =   1935
+      End
+      Begin VB.TextBox Text2 
+         Height          =   285
+         Left            =   3120
+         TabIndex        =   5
+         Text            =   "4"
+         Top             =   720
+         Width           =   375
+      End
+      Begin VB.Label Label1 
+         Caption         =   "Wochentag-Nr."
+         Height          =   255
+         Left            =   1800
+         TabIndex        =   8
+         Top             =   720
+         Width           =   1095
+      End
+   End
    Begin VB.ListBox List2 
       Height          =   5130
       Left            =   9120
-      TabIndex        =   8
+      TabIndex        =   3
       Top             =   240
       Width           =   4215
    End
-   Begin VB.CommandButton Command4 
-      Caption         =   "Command4"
-      Height          =   495
-      Left            =   360
-      TabIndex        =   7
-      Top             =   3600
-      Width           =   1215
-   End
-   Begin VB.CommandButton Command3 
-      Caption         =   "Command3"
-      Height          =   495
-      Left            =   360
-      TabIndex        =   6
-      Top             =   2520
-      Width           =   1215
-   End
    Begin VB.ListBox List1 
       Height          =   5130
-      Left            =   4200
-      TabIndex        =   5
+      Left            =   4800
+      TabIndex        =   2
       Top             =   240
       Width           =   4095
    End
    Begin VB.TextBox Text3 
       Height          =   285
-      Left            =   1920
-      TabIndex        =   4
+      Left            =   240
+      TabIndex        =   1
       Text            =   "tst"
-      Top             =   1440
-      Width           =   1695
+      Top             =   1080
+      Width           =   4095
    End
-   Begin VB.CommandButton Command2 
-      Caption         =   "Command2"
+   Begin VB.CommandButton C_ServiceHistory 
+      Caption         =   "Service History"
       Height          =   495
       Left            =   360
-      TabIndex        =   3
-      Top             =   1440
-      Width           =   1215
-   End
-   Begin VB.TextBox Text2 
-      Height          =   285
-      Left            =   1800
-      TabIndex        =   2
-      Text            =   "4"
-      Top             =   600
-      Width           =   1215
-   End
-   Begin VB.TextBox Text1 
-      Height          =   285
-      Left            =   1800
-      TabIndex        =   1
-      Text            =   "27.1.2020"
-      Top             =   240
-      Width           =   1935
-   End
-   Begin VB.CommandButton Command1 
-      Caption         =   "Command1"
-      Height          =   495
-      Left            =   240
       TabIndex        =   0
-      Top             =   240
+      Top             =   360
       Width           =   1215
    End
    Begin MSComDlg.CommonDialog CommonDialog1 
-      Left            =   7920
+      Left            =   13440
       Top             =   240
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
+   End
+   Begin VB.Label Label3 
+      Caption         =   "- falsches Datumsformat korrigieren"
+      Height          =   255
+      Left            =   1680
+      TabIndex        =   13
+      Top             =   600
+      Width           =   2535
+   End
+   Begin VB.Label Label2 
+      Caption         =   "- fehlende Einträge ergänzen"
+      Height          =   255
+      Left            =   1680
+      TabIndex        =   12
+      Top             =   360
+      Width           =   2535
    End
 End
 Attribute VB_Name = "ServiceCheckWeekDay"
@@ -109,24 +149,26 @@ Private Type HistoryItem
 End Type
 
 
-Private Sub Command1_Click()
+Private Sub C_WeekdayDemo_Click()
     Dim Datum1 As String
-    Dim Tag1 As Integer
-'    Datum1 = "24.12.2002"     ' Datum zuweisen
-'    Tag1 = Weekday(Datum1)    ' ergibt 3
-'    Text2 = Weekday(Datum1)
-'    MsgBox "Die Variable Tag1" & vbCrLf & "enthält " & Weekday(Datum1) & " - für Dienstag."
-
 
     Datum1 = Text1.Text
-    Tag1 = Weekday(Datum1)     ' ergibt 3
-    Text2 = Tag1
-
-
-
+    ' ermittelt den Wochentag zu einem Datum. 1 = Sonntag, 2 = Montag,...
+    Text2 = Weekday(Datum1)
 End Sub
 
-Private Sub Command2_Click()
+
+Private Sub C_TageszahlInDatum_Click()
+    Dim intTag As Integer
+    Dim TageszahlInDatum  As Date
+    
+    intTag = Text4.Text
+    TageszahlInDatum = DateSerial(2000, 1, 1) + intTag - 1
+    Text5.Text = TageszahlInDatum
+End Sub
+
+
+Private Sub C_ServiceHistory_Click()
     Dim Fullpath As String
     Dim HistoryFileName As String
     Dim HistoryFile As Integer
@@ -233,109 +275,13 @@ Private Sub Command2_Click()
     Close HistoryFile
 
 
-
-
     WriteFinalFile App.Path & "\final.txt"
-
-
-
 
     Exit Sub
 ReadHistoryFileErr:
     MsgBox HistoryFileName & vbCr & Err.Description, , "xxxxx"
     
 End Sub
-
-Public Function TodayFunction() As String
-    Dim DateTimeString As String
-    Dim DateString As String
-    Dim SepArray() As String
-    
-    DateTimeString = Now
-    SepariereString DateTimeString, SepArray, " "
-    DateString = SepArray(0)
-    SepariereString DateString, SepArray, "."
-    TodayFunction = SepArray(2) & "-" & SepArray(1) & "-" & SepArray(0)
-End Function
-
-Private Sub Command3_Click()
-    Dim HistoryEntities() As String
-    Dim HistoryIdx As Long
-    Dim Zeile As String
-    Dim HistoryLine As HistoryItem
-    
-    Zeile = "2020-01-16;316,40;317,45;313,40;313,90;348.285;109.660.544"
-    SepariereString Zeile, HistoryEntities, ";"
-        HistoryLine.Datum = HistoryEntities(0)
-        HistoryLine.Erster = HistoryEntities(1)
-        HistoryLine.Hoch = HistoryEntities(2)
-        HistoryLine.Tief = HistoryEntities(3)
-        HistoryLine.Schlusskurs = HistoryEntities(4)
-        HistoryLine.Stuecke = HistoryEntities(5)
-
-    Zeile = "2020-01-16;;;;313,90;;"
-    SepariereString Zeile, HistoryEntities, ";"
-        HistoryLine.Datum = HistoryEntities(0)
-        HistoryLine.Erster = HistoryEntities(1)
-        HistoryLine.Hoch = HistoryEntities(2)
-        HistoryLine.Tief = HistoryEntities(3)
-        HistoryLine.Schlusskurs = HistoryEntities(4)
-        HistoryLine.Stuecke = HistoryEntities(5)
-
-
-
-
-End Sub
-
-''Private Sub Command3_Click()
-''Dim idx As Long
-''Dim day As Long
-''Dim month As Long
-''Dim year As Long
-''
-''idx = 1
-''
-''day = 1
-''month = 1
-''year = 2000
-''
-''While idx < 7
-''  dt = day &
-''
-''
-''
-''Wend
-''
-''
-''
-''
-''
-''
-''End Sub
-
-Private Sub Command4_Click()
-'Public Function TageszahlInDatum(intTag As Integer) As Date
-   intTag = Text2.Text
-'   TageszahlInDatum = DateSerial(year(Now), 1, 1) + intTag - 1
-   TageszahlInDatum = DateSerial(2000, 1, 1) + intTag - 1
-   Text1.Text = TageszahlInDatum
-End Sub
-
-Public Function FormatDate(DString As String) As String
-    Dim DateEntities() As String
-
-    If InStr(DString, "-") Then
-        FormatDate = DString
-    ElseIf InStr(DString, ".") Then
-        SepariereString DString, DateEntities, "."
-        FormatDate = DateEntities(2) & "-" & DateEntities(1) & "-" & DateEntities(0)
-    Else
-        FormatDate = "0000-00-00"
-    End If
-End Function
-
-
-
 
 
 Public Sub WriteFinalFile(FinalFilename As String)
