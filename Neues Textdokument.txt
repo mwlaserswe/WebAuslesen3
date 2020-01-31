@@ -17,7 +17,15 @@ Historische Kurse 		https://www.ariva.de/bmw-aktie/historische_kurse
 
 Aktien-Infos			https://www.aktiendepot.net/aktienkauf-ratgeber/
 
-
+Aktuelle Kurse			https://www.onvista.de/aktien/BASF-Aktie-DE000BASF111	man kann auch einfach die WKN-Nummer eingeben
+				https://www.ariva.de/basf-aktie				man kann auch einfach die WKN-Nummer eingeben
+				https://finanzen.handelsblatt.com/96982/BASF11		man kann auch einfach die WKN-Nummer eingeben
+				https://www.boerse-stuttgart.de/de-de/produkte/aktien/stuttgart/703712
+				https://www.comdirect.de/inf/aktien/DE000BASF111	mit der ISIN Nummer
+				https://peketec.de/portal/charts/show/key/510200/
+				
+				
+				
 
 Etoro	kostenlose transaktionen??
 

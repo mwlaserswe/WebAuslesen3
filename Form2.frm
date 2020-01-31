@@ -235,6 +235,12 @@ Begin VB.Form Form1
          Caption         =   "Read single share value"
       End
    End
+   Begin VB.Menu M_Service 
+      Caption         =   "Service"
+      Begin VB.Menu M_CheckWeekDay 
+         Caption         =   "Check Weekday"
+      End
+   End
 End
 Attribute VB_Name = "Form1"
 Attribute VB_GlobalNameSpace = False
@@ -584,6 +590,10 @@ End Sub
 
 Private Sub M_Chartlist_Click()
     ChartList.Show
+End Sub
+
+Private Sub M_CheckWeekDay_Click()
+    ServiceCheckWeekDay.Show
 End Sub
 
 Private Sub M_DisplayChart_Click()
