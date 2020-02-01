@@ -167,8 +167,13 @@ Private Sub C_TageszahlInDatum_Click()
     Text5.Text = TageszahlInDatum
 End Sub
 
-
 Private Sub C_ServiceHistory_Click()
+    
+    ServiceHistory "tst"
+End Sub
+
+
+Private Sub ServiceHistory(WKN As String)
     Dim Fullpath As String
     Dim HistoryFileName As String
     Dim HistoryFile As Integer
@@ -178,22 +183,32 @@ Private Sub C_ServiceHistory_Click()
     Dim TageszahlInDatum As String
     Dim HistoryLine As HistoryItem
     Dim DateIdx As Long
+    Dim FinalIdx As Long
     Dim Today As String
+    Dim Lastvalue As String
     
     ReDim FinalArray(0 To 0)
 
     
-    HistoryFileName = App.Path & "\History\" & Text3 & ".txt"
+    HistoryFileName = App.Path & "\History\" & WKN & ".txt"
+    List2.AddItem "**** " & WKN & " ****"
     Today = TodayFunction
 
 
-' On Error GoTo ReadHistoryFileErr
+    On Error GoTo ReadHistoryFileErr
     HistoryFile = FreeFile
     Open HistoryFileName For Input As HistoryFile
 
+    Lastvalue = 0
+
     ' Read Headline
     HistoryIdx = 0
+    DateIdx = 0
+    FinalIdx = 0
+
     Line Input #HistoryFile, Zeile
+    
+    
 '    List1.AddItem Zeile
     SepariereString Zeile, HistoryEntities, ";"
         HistoryLine.Datum = HistoryEntities(0)
@@ -203,12 +218,12 @@ Private Sub C_ServiceHistory_Click()
         HistoryLine.Schlusskurs = HistoryEntities(4)
         HistoryLine.Stuecke = HistoryEntities(5)
         HistoryLine.Volumen = HistoryEntities(6)
-'    List2.AddItem Zeile
-    FinalArray(DateIdx) = HistoryLine
+    FinalArray(FinalIdx) = HistoryLine
      
     ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
     HistoryIdx = 1
     DateIdx = 1
+    FinalIdx = 1
     
     While Not EOF(HistoryFile) And (TageszahlInDatum <> Today)
 
@@ -237,14 +252,22 @@ Private Sub C_ServiceHistory_Click()
                 DoEvents
             End If
         
+        ' Check missing days
         While (TageszahlInDatum <> HistoryLine.Datum) And (TageszahlInDatum <> Today)
-            List2.AddItem TageszahlInDatum & "   Inserted "
-            ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
-            FinalArray(DateIdx).Datum = TageszahlInDatum
-            FinalArray(DateIdx).Bemerkung = "Inserted"
+            Dim ds As String
             
-            If (Weekday(FinalArray(DateIdx).Datum) = 7) Or (Weekday(FinalArray(DateIdx).Datum) = 1) Then
-                FinalArray(DateIdx).Bemerkung = "Weekend"
+            ds = Weekday(TageszahlInDatum)
+            ' No entry for Saturday and Sunday
+            If (Weekday(TageszahlInDatum) = 7) Or (Weekday(TageszahlInDatum) = 1) Then
+
+            ' Normal working day: Insert missing lines. Assuming, value was last value
+            Else
+                List2.AddItem TageszahlInDatum & "   Inserted "
+                ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
+                FinalArray(FinalIdx).Datum = TageszahlInDatum
+                FinalArray(FinalIdx).Schlusskurs = Lastvalue
+                FinalArray(FinalIdx).Bemerkung = "Inserted"
+                FinalIdx = FinalIdx + 1
             End If
             
             DateIdx = DateIdx + 1
@@ -255,11 +278,21 @@ Private Sub C_ServiceHistory_Click()
         
 '        List1.AddItem Zeile
         
-        List2.AddItem Zeile
-        FinalArray(DateIdx) = HistoryLine
         
-        If (Weekday(FinalArray(DateIdx).Datum) = 7) Or (Weekday(FinalArray(DateIdx).Datum) = 1) Then
-            FinalArray(DateIdx).Bemerkung = "Weekend"
+        ' No entry for Saturday and Sunday
+        If (Weekday(HistoryLine.Datum) = 7) Or (Weekday(HistoryLine.Datum) = 1) Then
+                List2.AddItem TageszahlInDatum & " --> Wochenende"
+        
+        ' Normal working day
+        Else
+            ' If there is a value = 0, replace with last value
+            If HistoryLine.Schlusskurs = 0 Then
+                HistoryLine.Schlusskurs = Lastvalue
+            End If
+            FinalArray(FinalIdx) = HistoryLine
+            Lastvalue = HistoryLine.Schlusskurs
+            FinalIdx = FinalIdx + 1
+            ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
         End If
         
 '        Text2.Text = Zeile
@@ -269,7 +302,7 @@ Private Sub C_ServiceHistory_Click()
         
         DoEvents
                 
-        ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
+        
     Wend
     ReDim Preserve FinalArray(0 To UBound(FinalArray) - 1)
     Close HistoryFile
@@ -282,6 +315,120 @@ ReadHistoryFileErr:
     MsgBox HistoryFileName & vbCr & Err.Description, , "xxxxx"
     
 End Sub
+'''Private Sub C_ServiceHistory_Click()
+'''    Dim Fullpath As String
+'''    Dim HistoryFileName As String
+'''    Dim HistoryFile As Integer
+'''    Dim Zeile As String
+'''    Dim HistoryEntities() As String
+'''    Dim HistoryIdx As Long
+'''    Dim TageszahlInDatum As String
+'''    Dim HistoryLine As HistoryItem
+'''    Dim DateIdx As Long
+'''    Dim Today As String
+'''
+'''    ReDim FinalArray(0 To 0)
+'''
+'''
+'''    HistoryFileName = App.Path & "\History\" & Text3 & ".txt"
+'''    Today = TodayFunction
+'''
+'''
+'''' On Error GoTo ReadHistoryFileErr
+'''    HistoryFile = FreeFile
+'''    Open HistoryFileName For Input As HistoryFile
+'''
+'''    ' Read Headline
+'''    HistoryIdx = 0
+'''    Line Input #HistoryFile, Zeile
+''''    List1.AddItem Zeile
+'''    SepariereString Zeile, HistoryEntities, ";"
+'''        HistoryLine.Datum = HistoryEntities(0)
+'''        HistoryLine.Erster = HistoryEntities(1)
+'''        HistoryLine.Hoch = HistoryEntities(2)
+'''        HistoryLine.Tief = HistoryEntities(3)
+'''        HistoryLine.Schlusskurs = HistoryEntities(4)
+'''        HistoryLine.Stuecke = HistoryEntities(5)
+'''        HistoryLine.Volumen = HistoryEntities(6)
+''''    List2.AddItem Zeile
+'''    FinalArray(DateIdx) = HistoryLine
+'''
+'''    ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
+'''    HistoryIdx = 1
+'''    DateIdx = 1
+'''
+'''    While Not EOF(HistoryFile) And (TageszahlInDatum <> Today)
+'''
+'''        HistoryLine.Datum = ""
+'''        HistoryLine.Erster = ""
+'''        HistoryLine.Hoch = ""
+'''        HistoryLine.Tief = ""
+'''        HistoryLine.Schlusskurs = ""
+'''        HistoryLine.Stuecke = ""
+'''        HistoryLine.Volumen = ""
+'''
+'''
+'''        Line Input #HistoryFile, Zeile
+'''
+'''        TageszahlInDatum = FormatDate(DateSerial(2000, 1, 1) + DateIdx - 1)
+'''
+'''        SepariereString Zeile, HistoryEntities, ";"
+'''            HistoryLine.Datum = FormatDate(HistoryEntities(0))
+'''            HistoryLine.Erster = HistoryEntities(1)
+'''            HistoryLine.Hoch = HistoryEntities(2)
+'''            HistoryLine.Tief = HistoryEntities(3)
+'''            HistoryLine.Schlusskurs = HistoryEntities(4)
+'''            If UBound(HistoryEntities) > 5 Then
+'''                HistoryLine.Stuecke = HistoryEntities(5)
+'''                HistoryLine.Volumen = HistoryEntities(6)
+'''                DoEvents
+'''            End If
+'''
+'''        While (TageszahlInDatum <> HistoryLine.Datum) And (TageszahlInDatum <> Today)
+'''            List2.AddItem TageszahlInDatum & "   Inserted "
+'''            ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
+'''            FinalArray(DateIdx).Datum = TageszahlInDatum
+'''            FinalArray(DateIdx).Bemerkung = "Inserted"
+'''
+'''            If (Weekday(FinalArray(DateIdx).Datum) = 7) Or (Weekday(FinalArray(DateIdx).Datum) = 1) Then
+'''                FinalArray(DateIdx).Bemerkung = "Weekend"
+'''            End If
+'''
+'''            DateIdx = DateIdx + 1
+'''            TageszahlInDatum = FormatDate(DateSerial(2000, 1, 1) + DateIdx - 1)
+'''            DoEvents
+'''        Wend
+'''
+'''
+''''        List1.AddItem Zeile
+'''
+'''        List2.AddItem Zeile
+'''        FinalArray(DateIdx) = HistoryLine
+'''
+'''        If (Weekday(FinalArray(DateIdx).Datum) = 7) Or (Weekday(FinalArray(DateIdx).Datum) = 1) Then
+'''            FinalArray(DateIdx).Bemerkung = "Weekend"
+'''        End If
+'''
+''''        Text2.Text = Zeile
+'''
+'''        HistoryIdx = HistoryIdx + 1
+'''        DateIdx = DateIdx + 1
+'''
+'''        DoEvents
+'''
+'''        ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
+'''    Wend
+'''    ReDim Preserve FinalArray(0 To UBound(FinalArray) - 1)
+'''    Close HistoryFile
+'''
+'''
+'''    WriteFinalFile App.Path & "\final.txt"
+'''
+'''    Exit Sub
+'''ReadHistoryFileErr:
+'''    MsgBox HistoryFileName & vbCr & Err.Description, , "xxxxx"
+'''
+'''End Sub
 
 
 Public Sub WriteFinalFile(FinalFilename As String)
@@ -290,13 +437,18 @@ Public Sub WriteFinalFile(FinalFilename As String)
     Dim idx As Long
     Dim Zeile As String
     
-    On Error GoTo OpenError
+'    On Error GoTo OpenError
     
 '    FinalFilename = App.Path & "\Final.txt"
     FinalFile = FreeFile
     Open FinalFilename For Output As FinalFile
     
     For idx = 0 To UBound(FinalArray)
+    
+        If idx > 5230 Then
+            idx = idx
+        End If
+        
         Zeile = FinalArray(idx).Datum _
                 & ";" & FinalArray(idx).Erster _
                 & ";" & FinalArray(idx).Hoch _

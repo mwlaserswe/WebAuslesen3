@@ -11,6 +11,14 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox T_CursorDate 
+      Height          =   285
+      Left            =   1680
+      TabIndex        =   28
+      Text            =   "--"
+      Top             =   7200
+      Width           =   975
+   End
    Begin VB.CommandButton C_HomeView 
       Height          =   375
       Left            =   14640
@@ -36,11 +44,11 @@ Begin VB.Form Form1
    End
    Begin VB.TextBox T_MouseXY 
       Height          =   285
-      Left            =   7560
+      Left            =   720
       TabIndex        =   23
       Text            =   "--"
-      Top             =   3480
-      Width           =   3375
+      Top             =   7200
+      Width           =   975
    End
    Begin VB.TextBox T_MouseCenter 
       Height          =   285
@@ -52,10 +60,10 @@ Begin VB.Form Form1
    End
    Begin VB.TextBox T_StartSharePrice 
       Height          =   285
-      Left            =   10560
+      Left            =   10440
       TabIndex        =   20
       Text            =   "100"
-      Top             =   7320
+      Top             =   7680
       Width           =   615
    End
    Begin VB.CommandButton Command1 
@@ -140,10 +148,10 @@ Begin VB.Form Form1
    Begin VB.HScrollBar HS_SD 
       Height          =   375
       LargeChange     =   10
-      Left            =   720
+      Left            =   600
       Max             =   300
       TabIndex        =   8
-      Top             =   7200
+      Top             =   7560
       Width           =   3735
    End
    Begin VB.Timer Timer_DisplayUpdate 
@@ -178,10 +186,10 @@ Begin VB.Form Form1
    End
    Begin VB.TextBox T_InvestmentStart 
       Height          =   285
-      Left            =   7680
+      Left            =   7560
       TabIndex        =   0
       Text            =   "200"
-      Top             =   7320
+      Top             =   7680
       Width           =   615
    End
    Begin VB.Label Label2 
@@ -195,34 +203,34 @@ Begin VB.Form Form1
    Begin VB.Label Label1 
       Caption         =   "Start Share Price [€]"
       Height          =   255
-      Left            =   8880
+      Left            =   8760
       TabIndex        =   21
-      Top             =   7320
+      Top             =   7680
       Width           =   1575
    End
    Begin VB.Label Label13 
       Caption         =   "Inverment Start"
       Height          =   255
-      Left            =   6480
+      Left            =   6360
       TabIndex        =   11
-      Top             =   7320
+      Top             =   7680
       Width           =   1095
    End
    Begin VB.Label Label12 
       Caption         =   "GD"
       Height          =   255
-      Left            =   4920
+      Left            =   4800
       TabIndex        =   10
-      Top             =   7320
+      Top             =   7680
       Width           =   255
    End
    Begin VB.Label Label11 
       BorderStyle     =   1  'Fixed Single
       Caption         =   "--"
       Height          =   255
-      Left            =   5280
+      Left            =   5160
       TabIndex        =   7
-      Top             =   7320
+      Top             =   7680
       Width           =   735
    End
    Begin VB.Label Label10 
@@ -717,6 +725,8 @@ End Sub
 
 Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+Dim CursorDate As Date
+
 '    Dim MouseX As Single
 '    Dim MouseY As Single
     
@@ -770,7 +780,10 @@ DoEvents
         If GlbScaleX <> 0 And GlbScaleY <> 0 Then
             MouseXY.X = (X - GlbOffX) / GlbScaleX
             MouseXY.Y = (Y - (PicChart.Height - GlbOffY)) / -GlbScaleY
-            T_MouseXY.Text = MouseXY.X & " " & MouseXY.Y
+            T_MouseXY.Text = Format(MouseXY.X, "0") & " " & Format(MouseXY.Y, "0")
+            CursorDate = DateSerial(2000, 1, 1) + CInt(MouseXY.X) - 1
+            T_CursorDate = CursorDate
+            
         End If
         T_X_Sc_Off.Text = "X-Scale: " & GlbScaleX & "   X-Offset: " & GlbOffX
 '        T_Y_Sc_Off.Text = "Y-Scale: " & GlbScaleY & "   Y-Offset: " & GlbOffY
