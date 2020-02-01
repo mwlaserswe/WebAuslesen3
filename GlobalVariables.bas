@@ -52,7 +52,9 @@ Public OffsetCurrent As MousePos
 Public OffsetLast As MousePos
 Public ScaleCurrent As MousePos
 Public ScaleLast As MousePos
-
+Public MouseCenterPos As MousePos
+Public MouseXY As MousePos
+ 
 '=== Analyse ===
 Public SdLength As Long
 'Public SharePrice As Double

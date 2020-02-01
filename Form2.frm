@@ -11,6 +11,45 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton C_HomeView 
+      Height          =   375
+      Left            =   14640
+      TabIndex        =   26
+      Top             =   2040
+      Width           =   375
+   End
+   Begin VB.TextBox T_Current_Sc_Off 
+      Height          =   285
+      Left            =   7560
+      TabIndex        =   25
+      Text            =   "--"
+      Top             =   2760
+      Width           =   3375
+   End
+   Begin VB.TextBox T_X_Sc_Off 
+      Height          =   285
+      Left            =   7560
+      TabIndex        =   24
+      Text            =   "--"
+      Top             =   3120
+      Width           =   3375
+   End
+   Begin VB.TextBox T_MouseXY 
+      Height          =   285
+      Left            =   7560
+      TabIndex        =   23
+      Text            =   "--"
+      Top             =   3480
+      Width           =   3375
+   End
+   Begin VB.TextBox T_MouseCenter 
+      Height          =   285
+      Left            =   7560
+      TabIndex        =   22
+      Text            =   "--"
+      Top             =   2400
+      Width           =   3375
+   End
    Begin VB.TextBox T_StartSharePrice 
       Height          =   285
       Left            =   10560
@@ -145,6 +184,14 @@ Begin VB.Form Form1
       Top             =   7320
       Width           =   615
    End
+   Begin VB.Label Label2 
+      Caption         =   "Home View"
+      Height          =   255
+      Left            =   15240
+      TabIndex        =   27
+      Top             =   2160
+      Width           =   1215
+   End
    Begin VB.Label Label1 
       Caption         =   "Start Share Price [€]"
       Height          =   255
@@ -249,6 +296,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 Dim Cnt As Long
+
 
 
 
@@ -424,22 +472,22 @@ AccountArray(1).WKN = "123456"
 
 End Sub
 
-Private Sub FG_CompPartial_Click()
-    Dim Fullpath As String
-    
-    FG_CompPartial.Col = 0
-    Form1.Caption = FG_CompPartial.Text
-    
-    ' FG_CompPartial.Row is cursor
-    FG_CompPartial.Col = 1  ' Point to WKN columnn
-    Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
-    T_HistoryFileName.Text = Fullpath
-    
-    FG_CompPartial.Col = 0  ' Point to company name columnn
-    ReadHistoryFile Fullpath, FG_CompPartial.Text
-
-    RefreshChart
-End Sub
+'''Private Sub FG_CompPartial_Click()
+'''    Dim Fullpath As String
+'''
+'''    FG_CompPartial.Col = 0
+'''    Form1.Caption = FG_CompPartial.Text
+'''
+'''    ' FG_CompPartial.Row is cursor
+'''    FG_CompPartial.Col = 1  ' Point to WKN columnn
+'''    Fullpath = App.Path & "\History\" & FG_CompPartial.Text & ".txt"
+'''    T_HistoryFileName.Text = Fullpath
+'''
+'''    FG_CompPartial.Col = 0  ' Point to company name columnn
+'''    ReadHistoryFile Fullpath, FG_CompPartial.Text
+'''
+'''    RefreshChart
+'''End Sub
 
 
 Private Sub FG_CompPartial_SelChange()
@@ -560,8 +608,8 @@ Private Sub Form_Load()
     GlbScaleY = 20
     ScaleLast.X = GlbScaleX
     ScaleLast.Y = GlbScaleY
-    
-    
+
+
     GlbOffX = 100
     GlbOffY = 100
     OffsetLast.X = GlbOffX
@@ -641,17 +689,38 @@ Private Sub M_ScanWebForWKN_Click()
     ScanWebForWKN.Show
 End Sub
 
+
+Private Sub C_HomeView_Click()
+    GlbScaleX = 3
+    GlbScaleY = 20
+    ScaleLast.X = GlbScaleX
+    ScaleLast.Y = GlbScaleY
+
+
+    GlbOffX = 100
+    GlbOffY = 100
+    OffsetLast.X = GlbOffX
+    OffsetLast.Y = GlbOffY
+
+    RefreshChart
+End Sub
+
 Private Sub PicChart_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     
     MouseDnPos.X = X
     MouseDnPos.Y = Y
     OffsetCurrent = OffsetLast
     ScaleCurrent = ScaleLast
+    MouseCenterPos = MouseXY
 
 End Sub
 
 Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+
+'    Dim MouseX As Single
+'    Dim MouseY As Single
     
+    ' change offset
     If Button = 1 Then
         MouseMove.X = X - MouseDnPos.X
         MouseMove.Y = -(Y - MouseDnPos.Y)
@@ -662,30 +731,49 @@ Private Sub PicChart_MouseMove(Button As Integer, Shift As Integer, X As Single,
         OffsetLast.X = GlbOffX
         OffsetLast.Y = GlbOffY
 
-'        PicChart.Cls
-'''        C_DrawChart_Click
         RefreshChart
         
-    End If
-
-    If Button = 2 Then
+    ' change scaling
+    ElseIf Button = 2 Then
         MouseMove.X = X - MouseDnPos.X
         MouseMove.Y = -(Y - MouseDnPos.Y)
         
-    
-        GlbScaleX = ScaleCurrent.X + MouseMove.X / 5000
-        GlbScaleY = ScaleCurrent.Y + MouseMove.Y / 100
-        ScaleLast.X = GlbScaleX
-        ScaleLast.Y = GlbScaleY
+        ' Scaling eigher X or Y
+        If Abs(MouseMove.X) > Abs(MouseMove.Y) Then
+            'GlbScaleX = ScaleCurrent.X + MouseMove.X / 5000
+            GlbScaleX = ScaleCurrent.X + (MouseMove.X / 500) * (ScaleCurrent.X)
+            If GlbScaleX < 1 Then
+                GlbScaleX = 1
+            End If
+            ScaleLast.X = GlbScaleX
+        Else
+            'GlbScaleY = ScaleCurrent.Y + MouseMove.Y / 100
+            GlbScaleY = ScaleCurrent.Y + MouseMove.Y / 100
+            If GlbScaleY < 0.1 Then
+                GlbScaleY = 0.1
+            End If
+            ScaleLast.Y = GlbScaleY
+        End If
 
         'Intersection of 2 lines: t2 = x (m1 - m2) + t1
-        GlbOffX = (MouseDnPos.X - OffsetCurrent.X) * (ScaleCurrent.X - GlbScaleX) + OffsetCurrent.X
+        GlbOffX = MouseCenterPos.X * (ScaleCurrent.X - GlbScaleX) + OffsetCurrent.X
+'        GlbOffY = MouseCenterPos.Y * (ScaleCurrent.Y - GlbScaleY) + OffsetCurrent.Y
         OffsetLast.X = GlbOffX
-''        Timer1_Timer
-        
-'        PicChart.Cls
-'''        C_DrawChart_Click
+
+T_Current_Sc_Off = "X current sc: " & ScaleCurrent.X & "   X current off: " & OffsetCurrent.X
+T_MouseCenter = "X MouseCenterPos: " & MouseCenterPos.X
+DoEvents
+
+
         RefreshChart
+    Else
+        If GlbScaleX <> 0 And GlbScaleY <> 0 Then
+            MouseXY.X = (X - GlbOffX) / GlbScaleX
+            MouseXY.Y = (Y - (PicChart.Height - GlbOffY)) / -GlbScaleY
+            T_MouseXY.Text = MouseXY.X & " " & MouseXY.Y
+        End If
+        T_X_Sc_Off.Text = "X-Scale: " & GlbScaleX & "   X-Offset: " & GlbOffX
+'        T_Y_Sc_Off.Text = "Y-Scale: " & GlbScaleY & "   Y-Offset: " & GlbOffY
     End If
 
 End Sub

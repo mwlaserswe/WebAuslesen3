@@ -1,0 +1,88 @@
+Return-Path: <s.f.netter@mnet-mail.de>
+Received: from mail-out.m-online.net ([212.18.0.10]) by mx.kundenserver.de
+ (mxeue111 [217.72.192.67]) with ESMTPS (Nemesis) id 1MfqSl-1jTfkB3KMD-00gFUc
+ for <weingartner@mwlaser.de>; Tue, 28 Jan 2020 20:39:46 +0100
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+	by mail-out.m-online.net (Postfix) with ESMTP id 486cQB4dJ2z1rXvw
+	for <weingartner@mwlaser.de>; Tue, 28 Jan 2020 20:39:46 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+	by mail.m-online.net (Postfix) with ESMTP id 486cQB4Nz8z1r42T
+	for <weingartner@mwlaser.de>; Tue, 28 Jan 2020 20:39:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+	by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+	with ESMTP id EbyJjyvANq-Z for <weingartner@mwlaser.de>;
+	Tue, 28 Jan 2020 20:39:44 +0100 (CET)
+X-Auth-Info: Tvhubg41cDo8waMwjYrYsG5hsLt9uKVYMeXTvvheLT0=
+Received: from [192.168.178.29] (aftr-62-216-208-127.dynamic.mnet-online.de [62.216.208.127])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.mnet-online.de (Postfix) with ESMTPSA
+	for <weingartner@mwlaser.de>; Tue, 28 Jan 2020 20:39:44 +0100 (CET)
+To: Sebastian Weingartner <weingartner@mwlaser.de>
+From: Franz und Sabine Netter <s.f.netter@mnet-mail.de>
+Subject: Etoro
+Message-ID: <6b938dce-b13e-46ec-14c5-7ad89d969075@mnet-mail.de>
+Date: Tue, 28 Jan 2020 20:39:49 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Envelope-To: <weingartner@mwlaser.de>
+X-Spam-Flag: NO
+X-UI-Filterresults: notjunk:1;V03:K0:HKDdt27rZCU=:eBRPmcOkhsFtyqBTsyL2qOAyNL
+ WBDY9f+tO6u0Ab9HngefMQ9Rlssv+W0NLueEGr9xldvetbPZ75+O5MBdOh+pQP/X++kQH7Yx/
+ Dw14rZaTt/0E09Jlr+soW9SlxYtJVexUWiox2K1UQv51TmT1s2Nj5EfRFrMARAELL2WPp5H5/
+ rJkXKYZ32azIWKB2gLGB+LeOaDdENgSfUhqxkJOoC9v6gNVYo8SE287Mo6MkRXXIWzs4eoZ9B
+ E+ypjyF5MAI3F3iL+tZohgyS5PW/WCV+lT7VGx1viparkiuDwCR7Ab7HzCfd1GuNvw6iuFGKG
+ j+ekYgLCIxIDUM7ftJzj5kOIty3mJicBg4LgSsZ/G1WtUEiUTZWlBaBF8OyzI7RRhTRC43hXb
+ jURhdEZkDzUDO7cAoXaH558YlxWV89ruWmPBMKnGyUSX9McjyJ0JnYYyWmYHnC8EV1C/dFRK0
+ XVNTof3WpCRJwVJChjfdoMMMWIIkANW3RGA03A6o+bBuuhb6+KBnUOuMMG5Q+0rILIdlSq3Jp
+ 5gr2m7DRTNetzQgAj+q92fAVNNK6XIMl+cALHB9basdHmj1t3xGJLwUiMHMy3iQPFUIzy66jE
+ rXcWvCJFYzxQ/2D13L7RhOjhLevmIR0RSbw0BQ77G6AJsRgZ4631VxXFHcwRfGdVuStr6Coy8
+ A4yGzMFFw/59tNeNx5Y5miraOQbUzu+ANN/R2gL80Bx9FuTPfRN/bPj7VpuDimwULEfZ03g48
+ k7JiWhgRlXu4ywMeTgXY9ml137uspgkTHxFEXeC9U0Ois51diS4wz8WJBHitOwg57Ab6bHDZk
+ oJXEaJPiX8ws9bPITUNtlYbqYOhD6ukP2OV4jJN3IvpxIiN7Ufoxi1LXuqA7NTYmy+p6hUyrM
+ mVf6qGPeYbyOq5HxTYO29qbkNCFoDpcSrGhCE5Gugpik7630CmDW09I62vvw1qoVVXeGkLlLq
+ 9jcjDqyOvlYw/j+JS/NQIhXExhjTSgIN04rSA17bk6FEQEOGxlPbYSjrzMwz9981XDpAeAcyz
+ mx4WYUPA/VurUXhMUvTeSe2DUyqiBVm7kfVlIhIeyzsnxHaUX206n8n/WPH9TrEqjmAhIIc4F
+ BOiX7im03AtVitxZWK5H2AAPO1f2/GGhUBemGBqiIDTNLK442k5wOA4JXwNAX3Rlshgk0Xww8
+ 1qtjyS6KPeS0YOtZVIVPQksCiucCO3yeDGomduXV6UdsoMbC471hXNNpHA4wx91bejjR70Bnp
+ HQyS/eIEQaZArdgugq73FD9h5qleXD4yi6oufkIWw6pivtNb1fVUb9M6/RUIjeyHtS8jtqgEI
+ M7fz32CX92PHc+y1Id5WkorRp8UfAjxF9tnN//iZp14pyox7byy/BXtooiaEPkJryVAHxLvJG
+ yY/3qEFtUBqwhyNsBQZkIw6aMsLNJfP0jwUo75q/2Xz4ov0tef7uPL+PubbGRZvmsQSnKccnS
+ DaB1LOJ36Om0uJg5vmdoLbVoD2XwRmtCorHUeLajHSKM3XWT1EKzGLf2tB+CD7RtrIdL3IIda
+ WEIgOI7l5Km5ycmiB0U1VZCUkO4RwExLqSNZ73DqqfUwi+YF2kF4JRB/CIWYMOg==
+
+Hallo Sebastian,
+
+Betrugsfirma ist etoro keine, so weit ich das beurteilen kann. Etoro ist 
+im Bereich Social Trading mit den Schwerpunkten CFD und Forex aktiv. Die 
+meisten Anleger verliren hier systembedingt Geld: Je nach Studie liegen 
+zwischen 75 und 95 Prozent der Kunden im Minus. Ein desaströser Wert 
+angesichts der Tatsache, dass sich viele Märkte auf Allzeithochs 
+befinden. Etoro lebt vor allem von Handelsspannen im Forex und 
+CFD-Handel, Provisionen der Produktanbieter sowie von den Gebühren für 
+die Auszahlung angelegter Kapitalmittel.
+
+Mit hoch gehebelten Produkten als Börsenanfänger nachhaltig Geld zu 
+verdienen, schaffen nur extrem wenige. Und praktisch niemand mit extrem 
+wenig Kapital. So viel Glück, Nervenstärke, Zielstrebigkeit, Begabung 
+und Gespür für Timing ist eben äußerst selten.
+
+Weitere Infos unter folgenden Links:
+https://www.betrugstest.com/etoro/
+https://www.forexbroker.de/etoro-erfahrungen/
+
+Sinnvoller wäre meiner Meinung nach für einen angehenden Trader, nach 
+mehrmonatigen Tests mit Muster- und Übungsdepots zunächst wenige 1000 
+Euro auf ein paar Aktien-ETFs (gibt es Long und Short mit 1er-Hebel) zu 
+setzen und so allmählich Kenntnisse und Erfahrungen an den 
+Kapitalmärkten zu machen. Läuft das gut, kann man ein paar Jahre später 
+den Einsatz in den fünfstelligen Bereich erhöhen und auf andere Bereiche 
+(z.B. Aktien, Bonds, Rohstoffe, Währungen) ausdehnen. Und dann .. wer weiß.
+
+Herzliche Grüße
+Franz
+

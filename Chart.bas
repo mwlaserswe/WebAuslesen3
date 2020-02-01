@@ -64,9 +64,14 @@ End Sub
 Public Sub DisplayChart()
 
     Dim idx As Long
-
+DisplayTestPattern
     'idx 0 is the head line
     idx = 1
+
+    If (0 / 1) + (Not Not ChartArray) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
 
     DrawStart CDbl(idx), ChartArray(idx).Value, ColorCoord
     For idx = 1 To UBound(ChartArray)
@@ -107,6 +112,12 @@ Public Sub MovingAverage(Length As Long)
     Dim Average As Double
     Dim Distance As Double
     Static LastDistance As Double
+    
+    If (0 / 1) + (Not Not ChartArray) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
+   
     
     If UBound(ChartArray) <= Length Then
         Exit Sub
@@ -239,6 +250,11 @@ Public Sub Analyse_02(InvestmentStart As Long, StartAccount As Double)
     idx = 0
     Step = 0
     
+    If (0 / 1) + (Not Not ChartArray) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
+    
     While idx <= UBound(ChartArray)
         Select Case Step
             Case 0:
@@ -366,4 +382,25 @@ Public Sub DrawLine(X As Double, Y As Double, LclColor As Long)
 '    Form1.PicChart.Line (Form1.PicChart.CurrentX, Form1.PicChart.CurrentY)-((idx * GlbScaleX) + GlbOffX, Form1.PicChart.Height - (ChartArray(idx).SD * GlbScaleY) - GlbOffY), DistanceColor
 
 End Sub
+
+
+Public Sub DisplayTestPattern()
+    Dim DistanceColor As Long
+    
+'''    DistanceColor = vbBlue
+'''    DrawStart 0, 0, DistanceColor
+'''    DrawLine 0, 1000, DistanceColor
+'''    DrawLine 2000, 1000, DistanceColor
+'''    DrawLine 2000, 0, DistanceColor
+'''    DrawLine 0, 0, DistanceColor
+'''
+'''    DrawStart 0, 0, DistanceColor
+'''    DrawLine 2000, 1000, DistanceColor
+'''
+'''    DrawStart 0, 1000, DistanceColor
+'''    DrawLine 2000, 0, DistanceColor
+
+End Sub
+
+
 
