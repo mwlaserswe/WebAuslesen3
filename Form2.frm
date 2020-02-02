@@ -11,6 +11,30 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox T_SD 
+      Height          =   285
+      Left            =   7560
+      TabIndex        =   33
+      Text            =   "--"
+      Top             =   7200
+      Width           =   975
+   End
+   Begin VB.TextBox T_Account 
+      Height          =   285
+      Left            =   5520
+      TabIndex        =   31
+      Text            =   "--"
+      Top             =   7200
+      Width           =   975
+   End
+   Begin VB.TextBox T_Value 
+      Height          =   285
+      Left            =   3600
+      TabIndex        =   29
+      Text            =   "--"
+      Top             =   7200
+      Width           =   975
+   End
    Begin VB.TextBox T_CursorDate 
       Height          =   285
       Left            =   1680
@@ -191,6 +215,30 @@ Begin VB.Form Form1
       Text            =   "200"
       Top             =   7680
       Width           =   615
+   End
+   Begin VB.Label Label5 
+      Caption         =   "SD:"
+      Height          =   255
+      Left            =   6960
+      TabIndex        =   34
+      Top             =   7200
+      Width           =   375
+   End
+   Begin VB.Label Label4 
+      Caption         =   "Account:"
+      Height          =   255
+      Left            =   4800
+      TabIndex        =   32
+      Top             =   7200
+      Width           =   735
+   End
+   Begin VB.Label Label3 
+      Caption         =   "Value:"
+      Height          =   255
+      Left            =   3000
+      TabIndex        =   30
+      Top             =   7200
+      Width           =   495
    End
    Begin VB.Label Label2 
       Caption         =   "Home View"
@@ -782,7 +830,18 @@ DoEvents
             MouseXY.Y = (Y - (PicChart.Height - GlbOffY)) / -GlbScaleY
             T_MouseXY.Text = Format(MouseXY.X, "0") & " " & Format(MouseXY.Y, "0")
             CursorDate = DateSerial(2000, 1, 1) + CInt(MouseXY.X) - 1
-            T_CursorDate = CursorDate
+            ' T_CursorDate = CursorDate
+            
+            ' Array ist nicht nicht dimensioniert
+            If (0 / 1) + (Not Not ChartArray) <> 0 Then
+                If MouseXY.X <= UBound(ChartArray) And MouseXY.X >= LBound(ChartArray) Then
+                  T_CursorDate = ChartArray(MouseXY.X).Date
+                  T_Value = ChartArray(MouseXY.X).Value
+                  T_Account = Format(ChartArray(MouseXY.X).Account, "0.00")
+                  T_SD = Format(ChartArray(MouseXY.X).SD, "0.00")
+                End If
+            
+            End If
             
         End If
         T_X_Sc_Off.Text = "X-Scale: " & GlbScaleX & "   X-Offset: " & GlbOffX

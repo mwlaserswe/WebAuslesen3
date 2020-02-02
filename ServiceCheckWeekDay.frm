@@ -234,6 +234,7 @@ Private Sub ServiceHistory(WKN As String)
         HistoryLine.Schlusskurs = ""
         HistoryLine.Stuecke = ""
         HistoryLine.Volumen = ""
+        HistoryLine.Bemerkung = ""
 
 
         Line Input #HistoryFile, Zeile
@@ -260,7 +261,7 @@ Private Sub ServiceHistory(WKN As String)
             ' No entry for Saturday and Sunday
             If (Weekday(TageszahlInDatum) = 7) Or (Weekday(TageszahlInDatum) = 1) Then
 
-            ' Normal working day: Insert missing lines. Assuming, value was last value
+            ' Normal working day: If line is missing, insert line and take previous value
             Else
                 List2.AddItem TageszahlInDatum & "   Inserted "
                 ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
@@ -288,6 +289,8 @@ Private Sub ServiceHistory(WKN As String)
             ' If there is a value = 0, replace with last value
             If HistoryLine.Schlusskurs = 0 Then
                 HistoryLine.Schlusskurs = Lastvalue
+                HistoryLine.Bemerkung = "Zero replaced"
+                List2.AddItem TageszahlInDatum & " --> Zero replaced"
             End If
             FinalArray(FinalIdx) = HistoryLine
             Lastvalue = HistoryLine.Schlusskurs
