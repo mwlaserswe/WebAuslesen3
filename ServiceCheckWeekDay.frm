@@ -168,8 +168,18 @@ Private Sub C_TageszahlInDatum_Click()
 End Sub
 
 Private Sub C_ServiceHistory_Click()
+    Dim idx As Long
     
-    ServiceHistory "tst"
+    If (0 / 1) + (Not Not CompPartialLstArr) = 0 Then
+      ' Array ist nicht nicht dimensioniert
+      Exit Sub
+    End If
+
+    For idx = 0 To UBound(CompPartialLstArr)
+        ServiceHistory CompPartialLstArr(idx).WKN
+    Next idx
+    
+'    ServiceHistory "tst"
 End Sub
 
 
@@ -189,7 +199,7 @@ Private Sub ServiceHistory(WKN As String)
     
     ReDim FinalArray(0 To 0)
 
-    
+    List2.Clear
     HistoryFileName = App.Path & "\History\" & WKN & ".txt"
     List2.AddItem "**** " & WKN & " ****"
     Today = TodayFunction
@@ -216,8 +226,11 @@ Private Sub ServiceHistory(WKN As String)
         HistoryLine.Hoch = HistoryEntities(2)
         HistoryLine.Tief = HistoryEntities(3)
         HistoryLine.Schlusskurs = HistoryEntities(4)
-        HistoryLine.Stuecke = HistoryEntities(5)
-        HistoryLine.Volumen = HistoryEntities(6)
+        If UBound(HistoryEntities) > 5 Then
+            HistoryLine.Stuecke = HistoryEntities(5)
+            HistoryLine.Volumen = HistoryEntities(6)
+            DoEvents
+        End If
     FinalArray(FinalIdx) = HistoryLine
      
     ReDim Preserve FinalArray(0 To UBound(FinalArray) + 1)
@@ -311,8 +324,8 @@ Private Sub ServiceHistory(WKN As String)
     Close HistoryFile
 
 
-    WriteFinalFile App.Path & "\final.txt"
-
+    WriteFinalFile App.Path & "\HistoryNew\" & WKN & ".txt"
+    
     Exit Sub
 ReadHistoryFileErr:
     MsgBox HistoryFileName & vbCr & Err.Description, , "xxxxx"
