@@ -11,6 +11,27 @@ Begin VB.Form Form1
    ScaleHeight     =   8025
    ScaleWidth      =   17550
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton C_LastYear 
+      Height          =   375
+      Left            =   14640
+      TabIndex        =   37
+      Top             =   600
+      Width           =   375
+   End
+   Begin VB.CommandButton C_LastMonth 
+      Height          =   375
+      Left            =   14640
+      TabIndex        =   36
+      Top             =   1080
+      Width           =   375
+   End
+   Begin VB.CommandButton C_LaserWeek 
+      Height          =   375
+      Left            =   14640
+      TabIndex        =   35
+      Top             =   1560
+      Width           =   375
+   End
    Begin VB.TextBox T_SD 
       Height          =   285
       Left            =   7560
@@ -215,6 +236,30 @@ Begin VB.Form Form1
       Text            =   "200"
       Top             =   7680
       Width           =   615
+   End
+   Begin VB.Label Label15 
+      Caption         =   "Last Year"
+      Height          =   255
+      Left            =   15240
+      TabIndex        =   40
+      Top             =   720
+      Width           =   1215
+   End
+   Begin VB.Label Label14 
+      Caption         =   "Last Month"
+      Height          =   255
+      Left            =   15240
+      TabIndex        =   39
+      Top             =   1200
+      Width           =   1215
+   End
+   Begin VB.Label Label6 
+      Caption         =   "Last Week"
+      Height          =   255
+      Left            =   15240
+      TabIndex        =   38
+      Top             =   1680
+      Width           =   1215
    End
    Begin VB.Label Label5 
       Caption         =   "SD:"
@@ -459,6 +504,52 @@ Dim Cnt As Long
 
 End Sub
 
+Private Sub C_LaserWeek_Click()
+     ScaleChart UBound(ChartArray), 5
+End Sub
+
+Private Sub C_LastMonth_Click()
+     ScaleChart UBound(ChartArray), 22
+End Sub
+
+Private Sub C_LastYear_Click()
+    ScaleChart UBound(ChartArray), 261
+End Sub
+
+
+Private Sub ScaleChart(idx_End As Double, idx_Length As Double)
+    ' Gleichungssystem:
+    '     0     = m * idx-Start + t
+    ' Pic.Width = m * idx-End   + t
+    '
+    ' m * idx-Start + t -    0      = 0
+    ' m * idx-End   + t - Pic.Width = 0
+    '
+    ' Gleichungssystem:
+    ' A(1, 1) = idx_Start: A(1, 2) = 1: A(1, 3) = 0
+    ' A(2, 1) = idx_End:   A(2, 2) = 1: A(2, 3) = Pic.Width
+    Dim idx_Start As Double
+    
+    idx_Start = idx_End - idx_Length
+    
+    A(1, 1) = idx_Start: A(1, 2) = 1: A(1, 3) = 0
+    A(2, 1) = idx_End:   A(2, 2) = 1: A(2, 3) = PicChart.Width
+
+    GaussPivot A, X, 2
+    
+    GlbScaleX = X(1)
+    GlbOffX = X(2)
+
+    RefreshChart
+End Sub
+
+
+
+
+
+
+
+
 Private Sub C_WriteChart_Click()
     Dim ChartFilename As String
     Dim ChartFile As Integer
@@ -525,6 +616,10 @@ AccountArray(1).WKN = "123456"
 
 
     WriteAccountFile App.Path & "\Account.txt"
+
+End Sub
+
+Private Sub Command4_Click()
 
 End Sub
 

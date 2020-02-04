@@ -10,6 +10,38 @@ Begin VB.Form ServiceCheckWeekDay
    ScaleHeight     =   5700
    ScaleWidth      =   14145
    StartUpPosition =   3  'Windows Default
+   Begin VB.TextBox Text8 
+      Height          =   285
+      Left            =   2880
+      TabIndex        =   17
+      Text            =   "1"
+      Top             =   1800
+      Width           =   735
+   End
+   Begin VB.TextBox Text7 
+      Height          =   285
+      Left            =   2040
+      TabIndex        =   16
+      Text            =   "1"
+      Top             =   1800
+      Width           =   735
+   End
+   Begin VB.TextBox Text6 
+      Height          =   285
+      Left            =   2880
+      TabIndex        =   15
+      Text            =   "1"
+      Top             =   1320
+      Width           =   735
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   495
+      Left            =   600
+      TabIndex        =   14
+      Top             =   1320
+      Width           =   1215
+   End
    Begin VB.Frame Frame1 
       Caption         =   "Demos"
       Height          =   2895
@@ -90,11 +122,11 @@ Begin VB.Form ServiceCheckWeekDay
    End
    Begin VB.TextBox Text3 
       Height          =   285
-      Left            =   240
+      Left            =   2040
       TabIndex        =   1
-      Text            =   "tst"
-      Top             =   1080
-      Width           =   4095
+      Text            =   "1"
+      Top             =   1320
+      Width           =   735
    End
    Begin VB.CommandButton C_ServiceHistory 
       Caption         =   "Service History"
@@ -484,6 +516,37 @@ OpenError:
     MsgBox FinalFilename, , "Write error"
 
 End Sub
+
+
+
+Private Sub Command1_Click()
+    Dim a1 As Double
+    Dim a2 As Double
+    Dim a3 As Double
+    
+    Init
+    GaussPivot A, X, 2
+    
+    a1 = X(1)
+    a2 = X(2)
+  
+End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
